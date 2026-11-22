@@ -640,7 +640,7 @@ function renderQuoteLines(){
    <div><label>Prix d’achat unitaire TTC (€ / ML)</label><input type="number" min="0" step="0.01" data-qfield="purchaseUnit" value="${l.purchaseUnit??0}"></div>
    <div class="full procurementBox" data-quote-procurement="${i}">${(Array.isArray(l.tierPrices)&&l.tierPrices.length)?'<div class="materialSummaryTitle">📦 Approvisionnement fournisseur</div><div class="muted">Saisis le nombre de rouleaux à commander pour chaque longueur. Ce calcul reste distinct du métrage consommé et du prix de vente.</div><div class="materialGrid">'+l.tierPrices.slice().sort((a,b)=>Number(a.lengthMl)-Number(b.lengthMl)).map(t=>'<div><label>'+Number(t.lengthMl)+' ML · '+euro(t.priceTtc)+' TTC</label><input type="number" min="0" step="1" inputmode="numeric" data-q-tier-count="'+i+'" data-q-tier-length="'+Number(t.lengthMl)+'" value="'+(Number((l.purchasePlan||{})[t.lengthMl])||0)+'"></div>').join('')+'</div><div class="materialSummary" data-q-procurement-summary="'+i+'"></div>':'<div class="muted">Sélectionne une matière du catalogue disposant de tarifs par longueurs pour afficher les paliers fournisseurs.</div>'}</div>
    <div data-qcalc><label>Coefficient de marge matière</label><input type="number" min="0.01" step="0.01" data-qfield="coefficient" value="${l.coefficient??2}"></div>
-   <div data-qmanual><label>Prix de vente matière TTC (€)</label><input type="number" min="0" step="0.01" data-qfield="manualSale" value="${l.pricing==='manual'?(l.manualSale??0):((Number(l.quantity)||0)*(Number(l.purchaseUnit)||0)*(Number(l.coefficient)||0)).toFixed(2)}" ${l.pricing==='manual'?'':'readonly'}></div>
+   <div data-qmanual><label>Prix de vente matière TTC (€)</label><input type="number" min="0" step="0.01" data-qfield="manualSale" value="${l.pricing==='manual'?(l.manualSale??0):(quoteLineNumbers(l).purchase*(Number(l.coefficient)||0)).toFixed(2)}" ${l.pricing==='manual'?'':'readonly'}></div>
    <div><label>Nombre d’heures</label><input type="number" min="0" step="0.25" data-qfield="hours" value="${l.hours??0}"></div>
    <div><label>Taux horaire facturé (€ / h)</label><input type="number" min="0" step="0.01" data-qfield="hourly" value="${l.hourly??0}"></div>`;
   } else if(l.type==='Textes adhésifs'){
@@ -755,7 +755,7 @@ function quoteLineNumbers(l){
   const hasProcurement=tiers.length>0&&Object.values(plan).some(v=>(Number(v)||0)>0);
   if(hasProcurement){purchase=tiers.reduce((sum,t)=>sum+Math.max(0,Math.floor(Number(plan[t.lengthMl])||0))*(Number(t.priceTtc)||0),0);}
   else {purchase=(Number(l.quantity)||0)*(Number(l.purchaseUnit)||0);}
-  sale=l.pricing==='manual'?(Number(l.manualSale)||0):(Number(l.quantity)||0)*(Number(l.purchaseUnit)||0)*(Number(l.coefficient)||0);
+  sale=l.pricing==='manual'?(Number(l.manualSale)||0):purchase*(Number(l.coefficient)||0);
   labor=(Number(l.hours)||0)*(Number(l.hourly)||0);
  }
  else if(l.type==='Textes adhésifs'){purchase=Number(l.estimatedMaterialCost)||0;(l.items||[]).forEach(it=>sale+=Number(it.sale)||0);labor=(Number(l.hours)||0)*(Number(l.hourly)||0);}
@@ -766,7 +766,7 @@ function quoteLineNumbers(l){
 function updateQuoteLines(){
  let purchase=0,sale=0,margin=0,labor=0,total=0;
  document.querySelectorAll('[data-qline]').forEach(card=>{const l=editingQuoteLines[Number(card.dataset.qline)];if(!l)return;const n=quoteLineNumbers(l);purchase+=n.purchase;sale+=n.sale;margin+=n.margin;labor+=n.labor;total+=n.total;
-  const saleField=card.querySelector('[data-qfield="manualSale"]');if(saleField){saleField.value=l.pricing==='manual'?(Number(l.manualSale)||0).toFixed(2):((Number(l.quantity)||0)*(Number(l.purchaseUnit)||0)*(Number(l.coefficient)||0)).toFixed(2);saleField.readOnly=l.pricing!=='manual';}
+  const saleField=card.querySelector('[data-qfield="manualSale"]');if(saleField){saleField.value=l.pricing==='manual'?(Number(l.manualSale)||0).toFixed(2):(quoteLineNumbers(l).purchase*(Number(l.coefficient)||0)).toFixed(2);saleField.readOnly=l.pricing!=='manual';}
   const summary=card.querySelector('[data-qsummary]');if(summary){let extra='';if(l.type==='Textes adhésifs')extra='<div>Nombre de textes : <b>'+(l.items||[]).length+'</b> · Couleurs : <b>'+((l.items||[]).map(x=>x.color).filter(Boolean).join(', ')||'—')+'</b></div>';summary.innerHTML=`<div class="materialSummaryTitle">Récapitulatif de cette prestation</div>${extra}<div>Coût d’achat matière : <b>${euro(n.purchase)}</b></div><div>Prix de vente matière / prestation : <b>${euro(n.sale)}</b></div><div>Marge matière : <b>${euro(n.margin)}</b></div><div>Main-d’œuvre : <b>${euro(n.labor)}</b></div><div>Total de la ligne : <b>${euro(n.total)}</b></div>`;}
  });
  const shipping=Number($('shippingCost')?.value)||0;total+=shipping;
