@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0C6B74">
-<title>V20.0 - DECOSHIP Contacts - Tarifs fournisseurs par paliers</title>
+<title>DECOSHIP Contacts - Architecture trois pages</title>
 <style>
 :root{--d:#0C6B74;--b:#1C93A9;--o:#F08628;--y:#FCC019;--bg:#f3f7f7;--ink:#17343a;--muted:#6e858a}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;color:var(--ink)}
@@ -41,8 +41,9 @@ canvas{width:100%;height:250px;border:2px dashed #c8d8da;border-radius:14px;back
 .photoViewer img{display:block;max-width:96vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:8px;touch-action:pinch-zoom;-webkit-user-select:none;user-select:none}
 .photoViewerClose{position:absolute;right:14px;top:14px;width:48px;height:48px;border:0;border-radius:50%;background:#fff;color:#222;font-size:32px;line-height:48px;padding:0;z-index:3}
 .detailPhotos img{cursor:zoom-in!important}
-.materialBox{display:none!important;margin-bottom:14px;padding:12px;border:1px solid #d7e4e6;border-radius:14px;background:#fbfdfd}.materialBox h3{margin:0 0 8px;font-size:17px}.materialRow{border:1px solid #dbe7e9;border-radius:12px;padding:10px;margin-top:10px;background:#fff}.materialRowHead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:7px}.materialRowTitle{font-weight:800;color:var(--d)}.materialGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.materialGrid .full{grid-column:1/-1}.materialDelete{min-height:38px!important;padding:7px 11px!important;border-radius:10px!important;font-size:13px!important}.materialSummary{margin-top:9px;padding:9px;border-radius:10px;background:#f3f8f8;border:1px solid #dce9ea}.materialSummaryTitle{font-weight:800;margin-bottom:5px}.materialSummaryRow{padding:6px 0;border-top:1px solid #e0eaeb;font-size:13px}.materialSummaryRow:first-of-type{border-top:0}.materialSummaryRow strong{color:var(--d)}
+.materialBox{display:none!important;margin-bottom:14px;padding:12px;border:1px solid #d7e4e6;border-radius:14px;background:#fbfdfd}.materialBox h3{margin:0 0 8px;font-size:17px}.materialRow{border:1px solid #dbe7e9;border-radius:12px;padding:10px;margin-top:10px;background:#fff}.materialRowHead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:7px}.materialRowTitle{font-weight:800;color:var(--d)}.materialGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.materialGrid .full{grid-column:1/-1}.procurementTierGrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.procurementTierGrid .materialTierRow{min-width:0;border:1px solid #dbe7e9;border-radius:10px;padding:9px;background:#fff;display:grid;gap:5px}.procurementTierGrid .materialTierRow label{font-size:12px}.procurementTierGrid .materialTierRow input{min-width:0;width:100%}.materialDelete{min-height:38px!important;padding:7px 11px!important;border-radius:10px!important;font-size:13px!important}.materialSummary{margin-top:9px;padding:9px;border-radius:10px;background:#f3f8f8;border:1px solid #dce9ea}.materialSummaryTitle{font-weight:800;margin-bottom:5px}.materialSummaryRow{padding:6px 0;border-top:1px solid #e0eaeb;font-size:13px}.materialSummaryRow:first-of-type{border-top:0}.materialSummaryRow strong{color:var(--d)}
 @media(max-width:650px){.materialGrid{grid-template-columns:1fr}.materialGrid .full{grid-column:auto}}
+@media(max-width:650px){.procurementTierGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 .coverBox{margin:12px 0;padding:14px;border:1px solid #e7d5c8;border-radius:14px;background:#fffaf6}
 .coverBox h3{margin:0 0 7px;font-size:17px;color:#a94f20}
@@ -79,6 +80,77 @@ canvas{width:100%;height:250px;border:2px dashed #c8d8da;border-radius:14px;back
 .marginField input{width:100%;padding:11px;border:1px solid #d9a66f;border-radius:8px;font-size:16px;font-weight:700}
 .marginField small{display:block;margin-top:5px;color:#805018;font-size:11px}
 .materialTierRow{display:grid;grid-template-columns:1fr;gap:6px;padding:10px;border:1px solid var(--line,#ddd);border-radius:10px;margin-bottom:8px}.materialTierRow label{font-weight:600}.materialTierRow input{width:100%;box-sizing:border-box}
+
+/* Légende des couleurs de statuts sur l'accueil */
+.homeStatusLegend{display:flex;gap:8px 18px;flex-wrap:wrap;align-items:center;margin:0 0 12px;padding:8px 12px;background:#fff;border-radius:8px;font-size:12px;font-weight:800;color:#253f44}
+.homeStatusLegend span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.legendDot{display:inline-block;width:23px;height:11px;border-radius:2px}
+/* Architecture DECOSHIP inspirée de la maquette PNG */
+body{background:#f4f7f7}
+main{max-width:none;width:100%;padding:14px 18px}
+.decoship-banner-header{background:#3d7077;border-top:4px solid #d5a85b;border-bottom:4px solid #d5a85b}
+.decoship-banner{max-height:112px;object-fit:contain}
+.homeLayout{display:grid;grid-template-columns:145px minmax(0,1fr);gap:22px;max-width:1500px;margin:0 auto}
+.homeSidebar{display:flex;flex-direction:column;gap:18px}
+.sideTile{text-align:center;padding:8px 5px;border-radius:8px;background:transparent}
+.sideTile .sideIcon{font-size:45px;line-height:1.15;display:block;margin:6px auto}
+.sideTile .sideTitle{font-size:13px;font-weight:900;color:#222;line-height:1.1;text-transform:uppercase}
+.sideTile button{width:100%;min-height:32px;padding:6px 7px;border-radius:5px;font-size:11px;background:#5b9da5;margin-top:5px}
+.sideTile .orange{background:#df8b45}
+.sideTile .red{background:#df3e32}
+.sideTile .blue{background:#2c5599}
+.homeMain{min-width:0}
+.homeMain #planningCard{margin:0;background:#fff;border-radius:0;box-shadow:none;padding:14px}
+.homeMain #planningCard h2{display:none}
+.homeMain #overdueProjects{display:none}
+.homeMain #planningMonths{display:grid;grid-template-columns:1fr;gap:10px}
+.homeMain .actions{display:none}
+
+#supplierCatalogSync{display:none!important}
+#list .top{max-width:1450px;margin:10px auto 14px}
+#list .top h2{font-size:27px;color:#111}
+#list .top button{min-width:120px}
+.kanbanBoard{display:grid;grid-template-columns:repeat(6,minmax(145px,1fr));gap:9px;max-width:1500px;margin:0 auto;overflow-x:auto;align-items:stretch}
+.kanbanColumn{border:1.5px solid #5c969d;border-radius:13px;background:#f6f9f9;min-height:530px;padding:10px 9px}
+.kanbanHeading{font-size:15px;font-weight:900;color:#52757a;text-align:center;padding:8px 3px;background:#edf3f4;border-radius:9px;min-height:42px}
+.kanbanInstruction{display:none!important}
+.kanbanSample{display:none!important}
+.kanbanSample.blue{background:#079bd1}.kanbanSample.purple{background:#92245c}.kanbanSample.green{background:#56a44e}.kanbanSample.pink{background:#d52d83}.kanbanSample.orange{background:#ed6535}.kanbanSample.black{background:#080808}.kanbanSample.greenDark{background:#286d3d}.kanbanSample.red{background:#bd2029}
+.kanbanClient{display:block;width:100%;text-align:left;color:#fff;border:0;border-radius:2px;min-height:29px;padding:6px 7px;margin:5px 0;font-size:12px;box-shadow:none}
+.kanbanClient small{display:block;font-size:10px;font-weight:500;opacity:.95;margin-top:2px}
+.kanbanClient.blue{background:#079bd1}.kanbanClient.purple{background:#92245c}.kanbanClient.green{background:#56a44e}.kanbanClient.pink{background:#d52d83}.kanbanClient.orange{background:#ed6535}.kanbanClient.black{background:#080808}.kanbanClient.greenDark{background:#286d3d}.kanbanClient.red{background:#bd2029}
+.kanbanEmpty{font-size:11px;color:#9aaeb1;text-align:center;padding:12px 3px}
+#detail .detailTopLayout{display:grid;grid-template-columns:minmax(260px,1fr) minmax(240px,.75fr) auto;gap:24px;align-items:start;max-width:1150px;margin:25px auto 18px}
+#detail .detailInfoBox,#detail .detailStatusBox{background:#fff;border-radius:14px;padding:18px;min-height:140px;box-shadow:none}
+#detail .detailInfoBox .detailRow{border:0;padding:5px 0;display:grid;grid-template-columns:95px 1fr;gap:8px}
+#detail .detailInfoBox .detailLabel{font-size:13px;text-transform:none;letter-spacing:0;color:#557177}
+#detail .detailInfoBox .detailValue{font-size:14px;margin:0}
+#detail .detailStatusBox .detailLabel{font-size:12px;text-align:center;margin-bottom:8px}
+#detail .detailStatusBox select{border:0;background:transparent;color:#d52d2d;font-size:13px;font-weight:800;padding:4px;margin:0}
+#detail .detailReturn{min-width:110px;min-height:42px;background:#eef5f5;color:#47767c;border:1px solid #5c969d}
+#detail #detailTitle{display:none}
+#detail #detailBox{max-width:1150px;margin:0 auto;background:transparent;box-shadow:none;padding:0}
+#detail .detailProjectsArea{margin-top:20px}
+@media(max-width:850px){
+ .homeLayout{grid-template-columns:105px minmax(0,1fr);gap:10px}
+ .sideTile .sideIcon{font-size:34px}
+ .sideTile .sideTitle{font-size:10px}
+ .kanbanBoard{grid-template-columns:repeat(6,minmax(150px,1fr))}
+ #detail .detailTopLayout{grid-template-columns:1fr 1fr;gap:10px}
+ #detail .detailReturn{grid-column:1/-1;justify-self:end}
+}
+@media(max-width:600px){
+ main{padding:8px}
+ .homeLayout{grid-template-columns:1fr}
+ .homeSidebar{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}
+ .sideTile{padding:5px;background:#fff}
+ .sideTile .sideIcon{font-size:28px}
+ .sideTile .sideTitle{font-size:10px}
+ .homeMain #planningMonths{display:block}
+ #detail .detailTopLayout{grid-template-columns:1fr}
+ #detail .detailReturn{grid-column:auto}
+}
+
 </style>
 
 <style>
@@ -86,6 +158,7 @@ canvas{width:100%;height:250px;border:2px dashed #c8d8da;border-radius:14px;back
 .decoship-banner{display:block;width:100%;height:auto;max-height:206px;object-fit:contain;object-position:center}
 @media(max-width:600px){.decoship-banner-header{position:relative}.decoship-banner{width:100%;height:auto;max-height:none}}
 </style>
+<!-- V21.5 : fenêtre de connexion Cloudflare réactivée -->
 </head>
 
 <body>
@@ -112,34 +185,58 @@ canvas{width:100%;height:250px;border:2px dashed #c8d8da;border-radius:14px;back
 </header>
 <main>
 
-<section id="supplierCatalogSync" class="card" style="margin:12px 0;border:1px solid #e7a04b;background:#fffaf2">
-  <h2 style="margin:0 0 8px">📦 Catalogue fournisseurs</h2>
-  <div class="muted" style="margin-bottom:10px">Mise à jour autonome : sélectionne le fichier JSON exporté depuis ton catalogue Numbers. Le fichier sélectionné est envoyé au catalogue fournisseurs dans Cloudflare ; les contacts et les projets ne sont pas modifiés.</div>
-  <input type="file" id="supplierCatalogJsonFile" accept=".json,application/json" style="display:none">
-  <button type="button" id="chooseSupplierCatalogJson" class="orange" style="width:100%">📂 Choisir / importer un fichier JSON</button>
-  <div id="supplierCatalogFileInfo" class="muted" style="margin-top:7px"></div>
-  <div id="supplierCatalogSyncStatus" class="muted" role="status" style="margin-top:8px"></div>
-</section>
+
 
 
 <section id="home" class="view on">
-<div class="card"><div class="actions"><button id="new">＋ Nouveau contact</button><button class="alt" id="contactsBtn">📋 Mes contacts</button></div></div>
-<div class="card" id="planningCard">
-<h2>📅 Planning des projets</h2>
-<div class="muted" style="margin-bottom:14px">Les deux prochains mois s'affichent automatiquement.</div>
-<div id="overdueProjects" style="margin-bottom:14px"></div><div id="planningMonths"></div>
+<div class="homeLayout">
+ <aside class="homeSidebar">
+  <div class="sideTile">
+   <div class="sideTitle">Catalogue<br>fournisseur</div><span class="sideIcon">📚</span>
+   <button class="orange" type="button" id="sideCatalog">Importer un fichier JSON</button>
+  </div>
+  <div class="sideTile">
+   <div class="sideTitle">Contacts</div><span class="sideIcon">📒</span>
+   <button type="button" id="sideContacts">Accès aux contacts</button>
+  </div>
+  <div class="sideTile">
+   <div class="sideTitle">Projets<br>en retard</div><span class="sideIcon">⏱️</span>
+   <button class="red" type="button" id="sideProjects" aria-expanded="false">Accès aux projets</button>
+  </div>
+  <div class="sideTile">
+   <div class="sideTitle">Sauvegarde<br>des contacts</div><span class="sideIcon">🗂️</span>
+   <button type="button" id="backupBtn">Sauvegarde</button>
+   <button class="blue" type="button" id="restoreBtn">Restauration</button>
+   <input id="restoreFile" type="file" accept="application/json,.json" style="display:none">
+   <div id="backupStatus" class="muted" style="margin-top:5px"></div>
+  </div>
+ </aside>
+ <div class="homeMain">
+  <div class="homeStatusLegend" aria-label="Légende des statuts">
+   <span><i class="legendDot" style="background:#079bd1"></i>Demande</span>
+   <span><i class="legendDot" style="background:#9b245f"></i>RDV</span>
+   <span><i class="legendDot" style="background:#55a34b"></i>Devis à réaliser</span>
+   <span><i class="legendDot" style="background:#276c3e"></i>Devis réalisé</span>
+   <span><i class="legendDot" style="background:#c62935"></i>Produit</span>
+   <span><i class="legendDot" style="background:#d62c7c"></i>À produire</span>
+   <span><i class="legendDot" style="background:#ed6535"></i>À poser</span>
+   <span><i class="legendDot" style="background:#111111"></i>Terminé</span>
+  </div>
+  <div id="supplierCatalogSync" class="card" style="margin:0 0 12px;border:1px solid #e7a04b;background:#fffaf2">
+   <h2 style="margin:0 0 8px">📦 Catalogue fournisseurs</h2>
+   <div class="muted" style="margin-bottom:10px">Mise à jour du catalogue depuis le fichier JSON exporté depuis Numbers.</div>
+   <input type="file" id="supplierCatalogJsonFile" accept=".json,application/json" style="display:none">
+   <button type="button" id="chooseSupplierCatalogJson" class="orange" style="width:100%">📂 Choisir / importer un fichier JSON</button>
+   <div id="supplierCatalogFileInfo" class="muted" style="margin-top:7px"></div>
+   <div id="supplierCatalogSyncStatus" class="muted" role="status" style="margin-top:8px"></div>
+  </div>
+  <div class="card" id="planningCard">
+   <h2>📅 Planning des projets</h2>
+   <div class="muted" style="margin-bottom:14px">Les deux prochains mois s'affichent automatiquement.</div>
+   <div id="overdueProjects" style="margin-bottom:14px"></div><div id="planningMonths"></div>
+  </div>
+ </div>
 </div>
-<div class="card">
-<h2>💾 Sauvegarde des contacts</h2>
-<div class="muted" style="margin-bottom:12px">Sauvegarde tous tes clients, leurs informations, photos et notes dans un fichier que tu peux conserver dans l’app Fichiers ou sur iCloud Drive.</div>
-<div class="actions">
-<button id="backupBtn">💾 Sauvegarder</button>
-<button class="alt" id="restoreBtn">♻️ Restaurer</button>
-</div>
-<input id="restoreFile" type="file" accept="application/json,.json" style="display:none">
-<div id="backupStatus" class="muted" style="margin-top:10px"></div>
-</div>
-<div class="card"><h2>Prise de contact rapide</h2><div class="muted">Une fiche client, les photos du bateau et tes notes au stylet, réunis au même endroit.</div></div>
 </section>
 
 <section id="form" class="view">
@@ -147,10 +244,11 @@ canvas{width:100%;height:250px;border:2px dashed #c8d8da;border-radius:14px;back
 <div class="card">
 <div class="row"><div><label>Nom / Prénom</label><input id="name" autocomplete="name" placeholder="Jean Dupont"></div><div><label>Société</label><input id="company" placeholder="Entreprise"></div></div>
 <div><label>Nom du bateau</label><input id="boat" placeholder="Nom du bateau"></div>
+<div id="clientStatusField"><label>Statut du client</label><select id="clientStatusSelect" aria-label="Statut du client"><option>Demande</option><option>RDV</option><option>Devis à réaliser</option><option>Devis envoyé</option><option>Produit</option><option>À poser</option><option>Posé</option><option>Terminé</option></select></div>
 <div class="row"><div><label>Téléphone</label><input id="phone" type="tel" placeholder="06 00 00 00 00"></div><div><label>E-mail</label><input id="email" type="email" placeholder="contact@entreprise.fr"></div></div>
 <label>Bateau / Projet</label><input id="project" placeholder="Catamaran, covering, décoration…">
-<div class="row"><div><label>Statut</label><select id="status">
-<option>Demande</option><option>Rendez-vous</option><option>En attente</option><option>Terminé</option><option>À produire/poser</option>
+<div class="row"><div><label>Statut du projet</label><select id="status" aria-label="Statut du projet">
+<option>Demande</option><option>RDV</option><option>Devis à réaliser</option><option>Devis envoyé</option><option>Produit</option><option>À poser</option><option>Posé</option><option>Terminé</option>
 </select></div><div><label>Rappel</label><input id="follow" type="date"></div></div>
 <div class="financeBox">
 <h3>💶 Suivi financier</h3>
@@ -217,29 +315,21 @@ canvas{width:100%;height:250px;border:2px dashed #c8d8da;border-radius:14px;back
 </section>
 
 <section id="list" class="view">
-<div class="top"><h2>Mes contacts</h2><button class="alt" id="back2">← Retour</button></div>
-<div class="card">
-<div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
-<input class="search" id="search" placeholder="🔎 Rechercher rapidement un client (nom ou société)…" autocomplete="off" style="margin-bottom:0">
-<button type="button" class="alt" id="clearSearch" style="min-height:46px;padding:10px 13px;white-space:nowrap">✕ Effacer</button>
-</div>
-<div class="quickFilters" id="quickFilters" aria-label="Filtres rapides">
-<button type="button" class="quickFilter active" data-filter="">TOUS</button>
-<button type="button" class="quickFilter" data-filter="Demande">DEMANDE</button>
-<button type="button" class="quickFilter" data-filter="Rendez-vous">RENDEZ-VOUS</button>
-<button type="button" class="quickFilter" data-filter="En attente">EN ATTENTE</button>
-<button type="button" class="quickFilter" data-filter="Terminé">✓ TERMINÉ</button>
-<button type="button" class="quickFilter" data-filter="À produire/poser">À PRODUIRE/POSER</button>
-</div>
-<select id="statusFilter" style="margin-bottom:10px">
-<option value="">Tous les statuts</option><option>Demande</option><option>Rendez-vous</option><option>En attente</option><option>Terminé</option><option>À produire/poser</option>
-</select>
-<div id="listbox"></div>
-</div>
+ <div class="top">
+  <h2>MES CONTACTS</h2>
+  <div style="display:flex;gap:10px;align-items:center">
+   <button id="new" type="button">＋ Contacts</button>
+   <button class="alt" id="back2" type="button">◀ Retour</button>
+  </div>
+ </div>
+ <div class="card" style="max-width:1500px;margin:0 auto 12px">
+  <input class="search" id="search" placeholder="Rechercher un bateau ou une entreprise…" autocomplete="off" style="margin:0">
+ </div>
+ <div id="kanbanBoard" class="kanbanBoard"></div>
 </section>
 
 <section id="detail" class="view">
-<div class="top"><h2 id="detailTitle">Contact</h2><button class="alt" id="back3">← Contacts</button></div>
+<div class="top" style="display:none"><h2 id="detailTitle">Contact</h2><button class="alt" id="back3">← Contacts</button></div>
 <div class="card" id="detailBox"></div>
 </section>
 
@@ -408,8 +498,21 @@ async function migrateOldContacts(){
 }
 
 function normalizeStatus(s){
-  const map={'À commander':'Demande','À rappeler':'En attente','À encaisser':'En attente','Devis':'En attente','Accepté':'En attente','Acompte':'En attente','À facturer':'En attente','À produire':'À produire/poser','À poser':'À produire/poser'};
-  return map[s]||(['Demande','Rendez-vous','En attente','Terminé','À produire/poser'].includes(s)?s:'Demande');
+  const map={
+    'À commander':'Demande',
+    'Rendez-vous':'RDV',
+    'À rappeler':'Devis à réaliser',
+    'À encaisser':'Devis à réaliser',
+    'Devis':'Devis à réaliser',
+    'En attente':'Devis à réaliser',
+    'Accepté':'Produit',
+    'Acompte':'Produit',
+    'À facturer':'À poser',
+    'À produire':'Produit',
+    'À produire/poser':'Produit'
+  };
+  const value=map[String(s||'').trim()]||String(s||'').trim();
+  return ['Demande','RDV','Devis à réaliser','Devis envoyé','Produit','À poser','Posé','Terminé'].includes(value)?value:'Demande';
 }
 function normalizeContact(c){
   if(!c) return c;
@@ -431,7 +534,7 @@ function normalizeContact(c){
       materials:Array.isArray(c.materials)?JSON.parse(JSON.stringify(c.materials)):[]
     }];
   } else {
-    c.projects=c.projects.map(p=>({...p,status:normalizeStatus(p.status),quoteAmount:p.quoteAmount??'',depositAmount:p.depositAmount??'',depositStatus:p.depositStatus||'pending',balanceStatus:p.balanceStatus||'pending',invoiceAmount:p.invoiceAmount??'',materials:Array.isArray(p.materials)?p.materials:[]}));
+    c.projects=c.projects.map(p=>({...p,originalStatus:p.originalStatus||p.status,status:normalizeStatus(p.status),quoteAmount:p.quoteAmount??'',depositAmount:p.depositAmount??'',depositStatus:p.depositStatus||'pending',balanceStatus:p.balanceStatus||'pending',invoiceAmount:p.invoiceAmount??'',materials:Array.isArray(p.materials)?p.materials:[]}));
   }
   return c;
 }
@@ -441,7 +544,12 @@ function money(v){
   return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:2}).format(n);
 }
 function statusClass(s){
-  return {'Demande':'status-demande','Rendez-vous':'status-rdv','En attente':'status-attente','Terminé':'status-termine','À produire/poser':'status-production'}[s]||'status-demande';
+  return {
+    'Demande':'status-demande','RDV':'status-rdv','Rendez-vous':'status-rdv',
+    'Devis à réaliser':'status-attente','Devis envoyé':'status-attente','En attente':'status-attente',
+    'Produit':'status-production','À poser':'status-production','Posé':'status-production',
+    'À produire/poser':'status-production','Terminé':'status-termine'
+  }[s]||'status-demande';
 }
 
 async function getContacts(){
@@ -463,7 +571,20 @@ function view(id){
 }
 
 $('new').onclick=()=>newContact();
-$('contactsBtn').onclick=()=>view('list');
+
+if($('sideContacts'))$('sideContacts').onclick=()=>view('list');
+if($('sideProjects'))$('sideProjects').onclick=()=>{
+ const overdue=$('overdueProjects');
+ const button=$('sideProjects');
+ if(!overdue)return;
+ const isOpen=overdue.style.display==='block';
+ overdue.style.display=isOpen?'none':'block';
+ button.textContent=isOpen?'Accès aux projets':'Masquer les projets';
+ button.setAttribute('aria-expanded',String(!isOpen));
+ if(!isOpen)overdue.scrollIntoView({behavior:'smooth',block:'start'});
+};
+if($('sideCatalog'))$('sideCatalog').onclick=()=>{$('supplierCatalogJsonFile')?.click();};
+
 $('back1').onclick=()=>view('list');
 $('back2').onclick=()=>view('home');
 $('back3').onclick=()=>view('list');
@@ -522,6 +643,14 @@ setNoteMode('keyboard');
 $('clear').onclick=()=>{ctx.clearRect(0,0,pad.width/scale,pad.height/scale)};
 
 function materialLabel(m){return [m.supplier,m.brand,m.reference,m.color].filter(Boolean).join(' · ');}
+function ensurePurchaseTiers(source){
+  const existing=Array.isArray(source)?source:[];
+  const byLength=new Map(existing.map(t=>[Number(t.lengthMl),{...t}]));
+  [1,2.5,5,10,15,20,25,50].forEach(lengthMl=>{
+    if(!byLength.has(lengthMl))byLength.set(lengthMl,{lengthMl,priceHt:0,priceTtc:0});
+  });
+  return [...byLength.values()].sort((a,b)=>Number(a.lengthMl)-Number(b.lengthMl));
+}
 function renderMaterials(){
   const box=$('materials'); if(!box)return; box.innerHTML='';
   editingMaterials.forEach((m,i)=>{
@@ -532,7 +661,7 @@ function renderMaterials(){
       '<div class="materialGrid"><div class="full"><label>Nom matière / gamme</label><input data-material="name" data-index="'+i+'" placeholder="Nom matière"></div><div><label>Marque</label><input data-material="brand" data-index="'+i+'" placeholder="Marque"></div><div><label>Référence</label><input data-material="reference" data-index="'+i+'" placeholder="Référence"></div><div><label>Couleur</label><input data-material="color" data-index="'+i+'" placeholder="Couleur"></div><div><label>Laize (cm)</label><input data-material="widthCm" data-index="'+i+'" type="number" min="0" step="0.1" placeholder="Laize"></div><div><label>Quantité utilisée ('+(m.unit==='U'?'unités':'ML')+')</label><input data-material="length" data-index="'+i+'" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0,00"></div><div><label>Prix d’achat TTC / '+(m.unit==='U'?'U':'ML')+' (€)</label><input data-material="priceTtc" data-index="'+i+'" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0,00"></div><div><label>TVA (%)</label><input data-material="vat" data-index="'+i+'" type="number" min="0" step="0.1" placeholder="20"></div></div><div class="procurementBox" data-procurement="'+i+'"></div><div class="materialCost" data-material-cost="'+i+'"></div>';
     box.appendChild(row);
     const procurement=row.querySelector('[data-procurement]');
-    const tiers=Array.isArray(m.tierPrices)?m.tierPrices:[];
+    const tiers=(Array.isArray(m.tierPrices)&&m.tierPrices.length)?ensurePurchaseTiers(m.tierPrices):[];
     if(tiers.length){
       const plan=m.purchasePlan||{};
       procurement.innerHTML='<div class="materialSummaryTitle">📦 Approvisionnement fournisseur</div><div class="muted">Indique le nombre de rouleaux à commander pour chaque longueur disponible. Ce calcul reste distinct du métrage réellement utilisé.</div><div class="materialGrid">'+tiers.slice().sort((a,b)=>a.lengthMl-b.lengthMl).map(t=>'<div><label>'+t.lengthMl+' ML · '+euro(t.priceTtc)+' TTC</label><input type="number" min="0" step="1" inputmode="numeric" data-tier-count="'+i+'" data-tier-length="'+t.lengthMl+'" value="'+(Number(plan[t.lengthMl])||0)+'" placeholder="0 rouleau"></div>').join('')+'</div><div class="materialSummary" data-procurement-summary="'+i+'"></div>';
@@ -640,7 +769,7 @@ function renderQuoteLines(){
    <div class="full"><label>Matière / support</label><input data-qfield="materialName" value="${esc(l.materialName||'')}" placeholder="Référence, couleur, support…"></div>
    <div><label>Quantité consommée (ML)</label><input type="number" min="0" step="0.01" data-qfield="quantity" value="${l.quantity??0}"></div>
    <div><label>Prix d’achat unitaire TTC (€ / ML)</label><input type="number" min="0" step="0.01" data-qfield="purchaseUnit" value="${l.purchaseUnit??0}"></div>
-   <div class="full procurementBox" data-quote-procurement="${i}">${(Array.isArray(l.tierPrices)&&l.tierPrices.length)?'<div class="materialSummaryTitle">📦 Approvisionnement fournisseur</div><div class="muted">Renseigne le prix TTC de chaque rouleau disponible, puis le nombre à commander. Les prix déjà présents dans le catalogue sont conservés.</div><div class="materialGrid">'+l.tierPrices.slice().sort((a,b)=>Number(a.lengthMl)-Number(b.lengthMl)).map(t=>'<div class="full materialTierRow"><label>'+Number(t.lengthMl)+' ML · prix fournisseur TTC du rouleau</label><input type="number" min="0" step="0.01" inputmode="decimal" data-q-tier-price="'+i+'" data-q-tier-length="'+Number(t.lengthMl)+'" value="'+(Number(t.priceTtc)||0)+'" placeholder="Prix TTC"><label>Nombre de rouleaux de '+Number(t.lengthMl)+' ML</label><input type="number" min="0" step="1" inputmode="numeric" data-q-tier-count="'+i+'" data-q-tier-length="'+Number(t.lengthMl)+'" value="'+(Number((l.purchasePlan||{})[t.lengthMl])||0)+'"></div>').join('')+'</div><div class="materialSummary" data-q-procurement-summary="'+i+'"></div>':'<div class="muted">Sélectionne une référence fournisseur pour afficher les paliers de longueurs.</div>'}</div>
+   <div class="full procurementBox" data-quote-procurement="${i}">${(Array.isArray(l.tierPrices)&&l.tierPrices.length)?'<div class="materialSummaryTitle">📦 Approvisionnement fournisseur</div><div class="muted">Renseigne le prix TTC de chaque rouleau disponible, puis le nombre à commander. Les prix déjà présents dans le catalogue sont conservés.</div><div class="materialGrid procurementTierGrid">'+ensurePurchaseTiers(l.tierPrices).map(t=>'<div class="materialTierRow"><label>'+Number(t.lengthMl)+' ML · prix fournisseur TTC</label><input type="number" min="0" step="0.01" inputmode="decimal" data-q-tier-price="'+i+'" data-q-tier-length="'+Number(t.lengthMl)+'" value="'+(Number(t.priceTtc)||0)+'" placeholder="Prix TTC"><label>Rouleaux à commander</label><input type="number" min="0" step="1" inputmode="numeric" data-q-tier-count="'+i+'" data-q-tier-length="'+Number(t.lengthMl)+'" value="'+(Number((l.purchasePlan||{})[t.lengthMl])||0)+'"></div>').join('')+'</div><div class="materialSummary" data-q-procurement-summary="'+i+'"></div>':'<div class="muted">Sélectionne une référence fournisseur pour afficher les paliers de longueurs.</div>'}</div>
    <div data-qcalc><label>Coefficient de marge matière</label><input type="number" min="0.01" step="0.01" data-qfield="coefficient" value="${l.coefficient??2}"></div>
    <div data-qmanual><label>Prix de vente matière TTC (€)</label><input type="number" min="0" step="0.01" data-qfield="manualSale" value="${l.pricing==='manual'?(l.manualSale??0):(quoteLineNumbers(l).purchase*(Number(l.coefficient)||0)).toFixed(2)}" ${l.pricing==='manual'?'':'readonly'}></div>
    <div><label>Nombre d’heures</label><input type="number" min="0" step="0.25" data-qfield="hours" value="${l.hours??0}"></div>
@@ -739,7 +868,7 @@ function renderQuoteLines(){
     }).slice(0,200);
     select.innerHTML='<option value="">'+(matches.length?matches.length+' résultat(s) — choisir…':'Aucune référence TEGO trouvée')+'</option>'+matches.map(x=>`<option value="${esc(x.id)}">${esc([x.supplier,x.brand,x.reference,x.color||x.product].filter(Boolean).join(' · '))}</option>`).join('');
    };
-   refresh();search.addEventListener('input',refresh);select.addEventListener('change',()=>{const found=(materialCatalog||[]).find(x=>x.id===select.value);if(!found)return;const it=line.items[j]||(line.items[j]={});if(kind==='color'){it.color=found.color||found.product||'';it.colorCatalogId=found.id;}else{it.catalogId=found.id;it.supplier=found.supplier||'';it.purchase=Number(found.priceTtc)||Number(it.purchase)||0;it.description=it.description||found.product||found.reference||'';if(line.type==='Covering'||line.type==='Refit intérieur'){line.catalogId=found.id;line.materialName=[found.supplier,found.brand,found.reference,found.color].filter(Boolean).join(' · ');line.purchaseUnit=Number(found.priceTtc)||0;line.unit=found.unit==='U'?'U':'ML';line.vat=Number(found.vat)||20;line.tierPrices=(Array.isArray(found.tierPrices)&&found.tierPrices.length)?found.tierPrices.map(t=>({...t})):([1,2.5,5,10,15,20,25].map(lengthMl=>({lengthMl,priceHt:0,priceTtc:0})));line.purchasePlan=line.purchasePlan||{};}else if(line.type==='Découpe adhésive'){it.product=found.product||'';it.brand=found.brand||'';it.reference=found.reference||'';it.color=found.color||'';it.priceTtc=Number(found.priceTtc)||0;it.vat=Number(found.vat)||20;it.coefficient=Number(it.coefficient)||Number(line.coefficient)||2;}}renderQuoteLines();});
+   refresh();search.addEventListener('input',refresh);select.addEventListener('change',()=>{const found=(materialCatalog||[]).find(x=>x.id===select.value);if(!found)return;const it=line.items[j]||(line.items[j]={});if(kind==='color'){it.color=found.color||found.product||'';it.colorCatalogId=found.id;}else{it.catalogId=found.id;it.supplier=found.supplier||'';it.purchase=Number(found.priceTtc)||Number(it.purchase)||0;it.description=it.description||found.product||found.reference||'';if(line.type==='Covering'||line.type==='Refit intérieur'){line.catalogId=found.id;line.materialName=[found.supplier,found.brand,found.reference,found.color].filter(Boolean).join(' · ');line.purchaseUnit=Number(found.priceTtc)||0;line.unit=found.unit==='U'?'U':'ML';line.vat=Number(found.vat)||20;line.tierPrices=(Array.isArray(found.tierPrices)&&found.tierPrices.length)?found.tierPrices.map(t=>({...t})):([1,2.5,5,10,15,20,25,50].map(lengthMl=>({lengthMl,priceHt:0,priceTtc:0})));line.purchasePlan=line.purchasePlan||{};}else if(line.type==='Découpe adhésive'){it.product=found.product||'';it.brand=found.brand||'';it.reference=found.reference||'';it.color=found.color||'';it.priceTtc=Number(found.priceTtc)||0;it.vat=Number(found.vat)||20;it.coefficient=Number(it.coefficient)||Number(line.coefficient)||2;}}renderQuoteLines();});
   });
   card.querySelectorAll('[data-addsub]').forEach(btn=>btn.onclick=()=>{const t=line.type;const item=t==='Textes adhésifs'?{text:'',color:'',length:'',font:'',sale:0}:t==='Découpe adhésive'?{description:'',supplier:'',catalogId:'',product:'',brand:'',reference:'',color:'',length:0,priceTtc:0,vat:20,coefficient:2}:t==='Divers'?{description:'',supplier:'',purchase:0,sale:0}:{description:'',length:0,height:0,supplier:'',purchase:0,sale:0};line.items.push(item);renderQuoteLines();});
   card.querySelectorAll('[data-subdelete]').forEach(btn=>btn.onclick=()=>{const j=Number(btn.dataset.subdelete.split('-')[1]);line.items.splice(j,1);renderQuoteLines();});
@@ -758,7 +887,7 @@ function updateQuoteProcurementSummaries(){
 }
 function quoteLineNumbers(l){
  let purchase=0,sale=0,labor=0;
- if(l.type==='Covering') {
+ if(l.type==='Covering'||l.type==='Refit intérieur') {
   const tiers=Array.isArray(l.tierPrices)?l.tierPrices:[],plan=l.purchasePlan||{};
   const hasProcurement=tiers.length>0&&Object.values(plan).some(v=>(Number(v)||0)>0);
   if(hasProcurement){purchase=tiers.reduce((sum,t)=>sum+Math.max(0,Math.floor(Number(plan[t.lengthMl])||0))*(Number(t.priceTtc)||0),0);}
@@ -981,6 +1110,8 @@ function reset(){
   editingCoverItems=[]; if($('coverRoll'))$('coverRoll').value=1200; renderCoverItems();
   ['name','company','boat','phone','email','project','follow','note','quoteAmount','depositAmount','invoiceAmount'].forEach(i=>$(i).value='');
   $('status').value='Demande';
+  if($('clientStatusSelect'))$('clientStatusSelect').value='Demande';
+  if($('clientStatusField'))$('clientStatusField').style.display='block';
   updateFollowField();
   $('photoCamera').value='';
   $('photoLibrary').value='';
@@ -1011,6 +1142,9 @@ async function editContact(id,projectId=null,projectIndex=null){
 
   editingId=id;
   editingProjectId=projectId;
+  const editingClientOnly = projectId===null && projectIndex===null;
+  if($('clientStatusField'))$('clientStatusField').style.display=editingClientOnly?'block':'none';
+  if($('clientStatusSelect'))$('clientStatusSelect').value=getContactClientStatus(x);
   editingProjectIndex=(Number.isInteger(projectIndex) ? projectIndex : null);
   const isNewProject = projectId === '__new__';
   const projects=Array.isArray(x.projects)?x.projects:[];
@@ -1102,7 +1236,7 @@ $('save').onclick=async()=>{
       const editingClientOnly = editingProjectId===null && editingProjectIndex===null;
       if(editingClientOnly){
         // Modifier le client ne doit jamais créer un nouveau projet.
-        const updated={...old, name:$('name').value, company:$('company').value, boat:$('boat').value, phone:$('phone').value, email:$('email').value, projects};
+        const updated={...old, name:$('name').value, company:$('company').value, boat:$('boat').value, phone:$('phone').value, email:$('email').value, clientStatus:normalizeClientStatus($('clientStatusSelect')?.value||old.clientStatus||'Demande'), projects};
         await dbPut(updated);
         alert('Fiche client modifiée');
       }else{
@@ -1126,7 +1260,7 @@ $('save').onclick=async()=>{
       const obj={
         id:Date.now(),
         name:$('name').value, company:$('company').value, boat:$('boat').value, phone:$('phone').value, email:$('email').value,
-        projects:[project],
+        projects:[project], clientStatus:normalizeClientStatus($('clientStatusSelect')?.value||'Demande'),
         // Legacy fields kept for compatibility with older versions.
         project:project.name,status:project.status,follow:project.follow,quoteAmount:project.quoteAmount,depositAmount:project.depositAmount,depositStatus:project.depositStatus,balanceStatus:project.balanceStatus,invoiceAmount:project.invoiceAmount,note:project.note,drawing:project.drawing,noteType:project.noteType,photos:project.photos,materials:project.materials||[]
       };
@@ -1144,36 +1278,90 @@ $('save').onclick=async()=>{
   view('list');
 };
 
-async function render(){
-  let a=[];
-  try{
-    a=await getContacts();
-  }catch(e){
-    console.error(e);
-    $('listbox').innerHTML='<div class="empty">Impossible de charger les contacts.</div>';
-    return;
-  }
 
-  let q=$('search').value.trim().toLowerCase();
-  let sf=$('statusFilter').value;
-  let b=$('listbox');
-
-  // Recherche rapide par client : nom ou société uniquement.
-  // Le reste des informations (bateau, téléphone, e-mail, projets) reste inchangé.
-  if(q) a=a.filter(x=>(String(x.name||'')+' '+String(x.company||'')).toLowerCase().includes(q));
-  if(sf)a=a.filter(x=>(x.projects||[]).some(p=>normalizeStatus(p.status)===sf));
-
-  b.innerHTML=a.length?'':'<div class="empty">Aucun contact.</div>';
-
-  a.slice().sort((u,v)=>(Number(v.id)||0)-(Number(u.id)||0)).forEach(x=>{
-    let d=document.createElement('div');
-    d.className='contact';
-    const allProjects=x.projects||[]; const ps=sf?allProjects.filter(p=>normalizeStatus(p.status)===sf):allProjects; const company=(x.company||'').trim(); const boat=(x.boat||'').trim(); const displayName=company || boat || 'Sans société / bateau'; const secondary=company && boat ? boat : ''; const mini=ps.map(p=>'<div class="projectMini"><div class="projectMiniTop"><div class="projectMiniName">⛵ '+esc(p.name||'Projet sans nom')+'</div><span class="projectStatus '+statusClass(normalizeStatus(p.status))+'">'+esc(normalizeStatus(p.status))+'</span></div><div class="amounts"><span class="amount">Devis <strong>'+esc(p.quoteAmount!==''&&p.quoteAmount!=null?money(p.quoteAmount):'—')+'</strong></span><span class="amount">Facture <strong>'+esc(p.invoiceAmount!==''&&p.invoiceAmount!=null?money(p.invoiceAmount):'—')+'</strong></span></div></div>').join(''); d.innerHTML='<div style="width:100%"><b>'+esc(displayName)+'</b>'+ (secondary ? '<div class="muted">'+esc(secondary)+'</div>' : '') +'<div class="muted" style="margin-top:3px">'+esc(x.phone)+' · '+(sf?ps.length:allProjects.length)+' projet(s)'+(sf?' dans ce statut':'')+'</div>'+mini+'</div>'; 
-    d.onclick=()=>showContact(x.id);
-    b.appendChild(d);
-  });
+const CLIENT_STATUS_COLUMNS=[
+ {title:'Demande',statuses:['Demande'],color:'blue'},
+ {title:'RDV',statuses:['RDV','Rendez-vous'],color:'purple'},
+ {title:'Devis à réaliser',statuses:['Devis à réaliser','Devis envoyé','Devis réalisé'],color:'green'},
+ {title:'À produire',statuses:['À produire','Produit'],color:'pink'},
+ {title:'À poser',statuses:['À poser','Posé'],color:'orange'},
+ {title:'Terminé',statuses:['Terminé'],color:'black'}
+];
+function normalizeClientStatus(value){
+ const v=String(value||'').trim();
+ const map={
+  'Rendez-vous':'RDV','RDV':'RDV','Devis':'Devis à réaliser','En attente':'Devis à réaliser',
+  'Devis réalisé':'Devis à réaliser','Devis envoyé':'Devis envoyé',
+  'À produire/poser':'Produit','À produire':'Produit','Produit':'Produit',
+  'À poser':'À poser','Posé':'Posé','Terminé':'Terminé',
+  'Demande':'Demande','À commander':'Demande','À rappeler':'Devis à réaliser','À encaisser':'Devis à réaliser',
+  'Accepté':'Produit','Acompte':'Produit','À facturer':'À poser'
+ };
+ const n=map[v]||v;
+ return ['Demande','RDV','Devis à réaliser','Devis envoyé','Produit','À poser','Posé','Terminé'].includes(n)?n:'Demande';
+}
+function getContactClientStatus(c){
+ if(!c)return 'Demande';
+ const explicit=String(c.clientStatus||'').trim();
+ const projectStatuses=Array.isArray(c.projects)
+   ? c.projects.map(p=>String((p&&p.originalStatus)||(p&&p.status)||'').trim()).filter(Boolean)
+   : [];
+ const projectStatus=projectStatuses.find(v=>normalizeClientStatus(v)!=='Demande')||projectStatuses[0]||'';
+ const legacy=String(c.status||'').trim();
+ // Une version de test a pu initialiser clientStatus à Demande par défaut.
+ // Si un statut de projet plus précis existe, on le reprend pour le classement.
+ if(explicit){
+   const normalizedExplicit=normalizeClientStatus(explicit);
+   if(normalizedExplicit==='Demande'&&projectStatus&&normalizeClientStatus(projectStatus)!=='Demande'){
+     return normalizeClientStatus(projectStatus);
+   }
+   return normalizedExplicit;
+ }
+ if(legacy&&normalizeClientStatus(legacy)!=='Demande')return normalizeClientStatus(legacy);
+ if(projectStatus)return normalizeClientStatus(projectStatus);
+ if(legacy)return normalizeClientStatus(legacy);
+ return 'Demande';
+}
+function clientColumnForStatus(value){
+ const n=normalizeClientStatus(value);
+ if(n==='Devis envoyé')return 'Devis à réaliser';
+ if(n==='Produit')return 'À produire';
+ if(n==='Posé')return 'À poser';
+ return n;
+}
+async function saveClientStatus(id,value){
+ const c=await getContact(id);if(!c)return;
+ c.clientStatus=normalizeClientStatus(value);
+ await dbPut(c);
+ await render();
 }
 
+async function render(){
+ let contacts=[];
+ try{contacts=await getContacts();}
+ catch(e){console.error(e);const board=$('kanbanBoard');if(board)board.innerHTML='<div class="empty">Impossible de charger les contacts.</div>';return;}
+ const q=($('search')?.value||'').trim().toLowerCase();
+ if(q)contacts=contacts.filter(c=>(String(c.boat||'')+' '+String(c.company||'')+' '+String(c.name||'')).toLowerCase().includes(q));
+ const board=$('kanbanBoard');if(!board)return;
+ board.innerHTML=CLIENT_STATUS_COLUMNS.map(c=>
+  '<div class="kanbanColumn" data-column="'+esc(c.title)+'"><div class="kanbanHeading">'+esc(c.title)+'</div><div class="kanbanLive"></div></div>'
+ ).join('');
+ contacts.sort((a,b)=>(Number(b.id)||0)-(Number(a.id)||0)).forEach(c=>{
+  const st=getContactClientStatus(c);
+  const col=clientColumnForStatus(st);
+  const def=CLIENT_STATUS_COLUMNS.find(x=>x.title===col);
+  const host=board.querySelector('[data-column="'+col+'"] .kanbanLive');if(!host)return;
+  const label=(String(c.boat||'').trim()||String(c.company||'').trim()||String(c.name||'').trim()||'Client');
+  const tone=st==='Devis envoyé'?'greenDark':st==='Produit'?'red':st==='Posé'?'black':def.color;
+  const btn=document.createElement('button');btn.type='button';btn.className='kanbanClient '+tone;
+  btn.innerHTML='<b>'+esc(label)+'</b>'+(c.boat&&c.company?'<small>'+esc(c.company)+'</small>':'');
+  btn.onclick=()=>showContact(c.id);host.appendChild(btn);
+ });
+ board.querySelectorAll('.kanbanColumn').forEach(col=>{
+  const live=col.querySelector('.kanbanLive');
+  if(!live.children.length)live.innerHTML='<div class="kanbanEmpty"> </div>';
+ });
+}
 
 function setFinanceChecks(){
   const dp=$("depositPending"), dpa=$("depositPaid");
@@ -1209,12 +1397,13 @@ async function showContact(id){
 
   $('detailTitle').textContent=x.name||'Contact';
   let h='';
-  const row=(label,val)=>val
-    ? '<div class="detailRow"><div class="detailLabel">'+label+'</div><div class="detailValue">'+esc(val)+'</div></div>'
-    : '';
-
-  h+=row('Société',x.company)+row('Téléphone',x.phone)+row('E-mail',x.email);
-  h+='<div class="detailRow"><div class="detailLabel">Projets</div><div class="projectActions"><button onclick="newProject('+x.id+')">➕ Nouveau projet</button></div>'
+  const row=(label,val)=>'<div class="detailRow"><div class="detailLabel">'+label+'</div><div class="detailValue">'+esc(val||'—')+'</div></div>';
+  const currentClientStatus=getContactClientStatus(x);
+  h+='<div class="detailTopLayout"><div class="detailInfoBox">'+row('Nom',x.name)+row('Téléphone',x.phone)+row('E-mail',x.email)+row('Emplacement',x.boat||x.company)+'</div>'+
+    '<div class="detailStatusBox"><div class="detailLabel">STATUT</div><select aria-label="Statut du client" onchange="saveClientStatus('+Number(x.id)+',this.value)">'+
+    ['Demande','RDV','Devis à réaliser','Devis envoyé','Produit','À poser','Posé','Terminé'].map(v=>'<option value="'+v+'" '+(currentClientStatus===v?'selected':'')+'>'+v+'</option>').join('')+
+    '</select></div><button type="button" class="detailReturn" onclick="view(&quot;list&quot;)">◀ Retour</button></div>';
+  h+='<div class="detailProjectsArea"><div class="detailRow"><div class="detailLabel">Projets</div><div class="projectActions"><button onclick="newProject('+x.id+')">➕ Nouveau projet</button></div>'
     +'<div class="muted" style="margin-top:8px">Chaque projet possède son statut, son montant de devis et son montant de facture, en plus de ses photos et notes.</div></div>';
 
   (x.projects||[]).forEach((p,projectIndex)=>{
@@ -1231,6 +1420,7 @@ async function showContact(id){
       '</div>';
   });
 
+  h+='</div>';
   h+='<div class="editbar"><button class="alt" onclick="editContact('+x.id+')">✏️ Modifier le client</button><button class="alt" onclick="view(\'list\')">← Contacts</button><button class="danger" style="grid-column:1/-1" onclick="deleteContact('+x.id+')">🗑️ Supprimer le contact</button></div>';
   $('detailBox').innerHTML=h;
   view('detail');
@@ -1328,18 +1518,6 @@ async function deleteProject(contactId, projectIndex){
   await showContact(contactId);
 }
 $('search').oninput=render;
-$('clearSearch').onclick=()=>{ $('search').value=''; render(); $('search').focus(); };
-$('statusFilter').onchange=()=>{
-  document.querySelectorAll('.quickFilter').forEach(btn=>btn.classList.toggle('active',btn.dataset.filter===$('statusFilter').value));
-  render();
-};
-document.querySelectorAll('.quickFilter').forEach(btn=>{
-  btn.onclick=()=>{
-    $('statusFilter').value=btn.dataset.filter;
-    document.querySelectorAll('.quickFilter').forEach(b=>b.classList.toggle('active',b===btn));
-    render();
-  };
-});
 
 $('backupBtn').onclick=async()=>{
   try{ await backupContacts(); }
@@ -1359,8 +1537,21 @@ $('restoreFile').onchange=async(e)=>{
   const months=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
   const days=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
   const colors={
-    'Demande':'#2196f3','Rendez-vous':'#e53935','En attente':'#9c27b0','Terminé':'#455a64','À produire/poser':'#00897b'
+    'Demande':'#079bd1','À commander':'#079bd1',
+    'Rendez-vous':'#9b245f','RDV':'#9b245f',
+    'En attente':'#55a34b','À rappeler':'#55a34b','À encaisser':'#55a34b',
+    'Devis':'#55a34b','Devis à réaliser':'#55a34b','Devis réalisé':'#55a34b',
+    'Devis envoyé':'#276c3e','Accepté':'#d62c7c','Acompte':'#d62c7c',
+    'À produire':'#d62c7c','Produit':'#c62935',
+    'À poser':'#ed6535','À facturer':'#ed6535','Posé':'#111111',
+    'Terminé':'#111111','À produire/poser':'#ed6535'
   };
+  function projectCalendarColor(rawStatus){
+    const raw=String(rawStatus||'').trim();
+    if(colors[raw])return colors[raw];
+    const normalized=normalizeStatus(raw);
+    return colors[normalized]||'#607d8b';
+  }
   function keyFromDate(v){
     if(!v)return null;
     const m=String(v).match(/^(\d{4})-(\d{2})-(\d{2})/);
@@ -1384,7 +1575,7 @@ $('restoreFile').onchange=async(e)=>{
       let cell='<div style="min-height:62px;border:1px solid #e3eaec;border-radius:8px;padding:4px;background:'+(isToday?'#eef9fa':'#fff')+';font-size:12px;overflow:hidden">';
       cell+='<b style="color:'+(isToday?'#087d87':'#4d666c')+'">'+d+'</b>';
       for(const item of (projectsByDate[key]||[])){
-        const bg=colors[item.status]||'#607d8b';
+        const bg=item.color||colors[item.status]||'#607d8b';
         cell+='<div onclick="showContact('+Number(item.contactId)+')" style="margin-top:3px;padding:3px 4px;border-radius:5px;background:'+bg+';color:#fff;font-weight:700;line-height:1.15;cursor:pointer;white-space:normal">'+escLocal(item.name)+'<div style="font-size:10px;font-weight:500;opacity:.95">'+escLocal(item.status)+'</div></div>';
       }
       cell+='</div>'; html+=cell;
@@ -1411,6 +1602,7 @@ $('restoreFile').onchange=async(e)=>{
             client:(company || (c.name||'').trim()),
             boat:boat,
             status:normalizeStatus(p.status),
+            color:projectCalendarColor(p.originalStatus||p.status),
             contactId:c.id,
             follow:dateKey
           };
@@ -1430,7 +1622,7 @@ $('restoreFile').onchange=async(e)=>{
         html+='<div style="font-weight:900;color:#c62828;font-size:17px;margin-bottom:8px">⚠️ Projets en retard ('+overdue.length+')</div>';
         html+='<div style="font-size:12px;color:#7a4b4b;margin-bottom:8px">La date de rappel est dépassée.</div>';
         overdue.forEach(item=>{
-          const bg=colors[item.status]||'#607d8b';
+          const bg=item.color||colors[item.status]||'#607d8b';
           const parts=item.follow.split('-');
           const dateLabel=parts[2]+'/'+parts[1]+'/'+parts[0];
           html+='<div onclick="showContact('+Number(item.contactId)+')" style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-top:7px;padding:10px;border-radius:10px;background:#fff;border:1px solid #f0cccc;cursor:pointer">';
@@ -1556,69 +1748,61 @@ async function importSupplierCatalogJson(file){
   const info=$('supplierCatalogFileInfo');
   const btn=$('chooseSupplierCatalogJson');
   if(!file)return;
-  if(!apiToken || !apiBase){
-    status.textContent='Connecte d’abord Cloudflare avant d’importer le catalogue.';
-    return;
-  }
-  if(file.size>5*1024*1024){
-    status.textContent='Fichier trop volumineux (maximum 5 Mo).';
-    return;
-  }
+  if(file.size>5*1024*1024){status.textContent='Fichier trop volumineux (maximum 5 Mo).';return;}
   btn.disabled=true;
   status.textContent='Lecture et vérification du fichier JSON…';
   try{
     const raw=await file.text();
     const materials=JSON.parse(raw);
-    if(!Array.isArray(materials) || materials.length===0){
-      throw new Error('Le JSON doit contenir une liste de références (tableau).');
-    }
+    if(!Array.isArray(materials)||materials.length===0) throw new Error('Le JSON doit contenir une liste de références (tableau).');
     const required=['id','supplier','family','product','brand','reference','color','widthCm','unit','priceHt','vat','priceTtc','swatch','link','notes','tierPrices'];
-    const ids=new Set();
-    const allowedVat=[5,10,20,22];
+    const ids=new Set(); const allowedVat=[5,10,20,22];
     for(let i=0;i<materials.length;i++){
       const m=materials[i];
-      if(!m || typeof m!=='object' || Array.isArray(m)) throw new Error('Ligne '+(i+1)+' : entrée invalide.');
-      for(const key of required){
-        if(!(key in m)) throw new Error('Ligne '+(i+1)+' : champ manquant « '+key+' ».');
-      }
-      if(typeof m.id!=='string' || !m.id.trim()) throw new Error('Ligne '+(i+1)+' : identifiant manquant.');
-      if(ids.has(m.id)) throw new Error('Identifiant en double : '+m.id);
-      ids.add(m.id);
-      for(const key of ['supplier','family','product','brand','reference','color']){
-        if(typeof m[key]!=='string' || !m[key].trim()) throw new Error('Ligne '+(i+1)+' : champ « '+key+' » vide ou invalide.');
-      }
-      for(const key of ['widthCm','priceHt','vat','priceTtc']){
-        if(typeof m[key]!=='number' || !Number.isFinite(m[key])) throw new Error('Ligne '+(i+1)+' : « '+key+' » doit être un nombre.');
-      }
+      if(!m||typeof m!=='object'||Array.isArray(m)) throw new Error('Ligne '+(i+1)+' : entrée invalide.');
+      for(const key of required) if(!(key in m)) throw new Error('Ligne '+(i+1)+' : champ manquant « '+key+' ».');
+      if(typeof m.id!=='string'||!m.id.trim()) throw new Error('Ligne '+(i+1)+' : identifiant manquant.');
+      if(ids.has(m.id)) throw new Error('Identifiant en double : '+m.id); ids.add(m.id);
+      for(const key of ['supplier','family','product','brand','reference','color']) if(typeof m[key]!=='string'||!m[key].trim()) throw new Error('Ligne '+(i+1)+' : champ « '+key+' » vide ou invalide.');
+      for(const key of ['widthCm','priceHt','vat','priceTtc']) if(typeof m[key]!=='number'||!Number.isFinite(m[key])) throw new Error('Ligne '+(i+1)+' : « '+key+' » doit être un nombre.');
       if(!allowedVat.includes(m.vat)) throw new Error('Ligne '+(i+1)+' : TVA non autorisée ('+m.vat+' %).');
-      if(m.priceHt<0 || m.priceTtc<0 || m.widthCm<0) throw new Error('Ligne '+(i+1)+' : prix ou largeur négatif.');
+      if(m.priceHt<0||m.priceTtc<0||m.widthCm<0) throw new Error('Ligne '+(i+1)+' : prix ou largeur négatif.');
       const expected=Math.round(m.priceHt*(1+m.vat/100)*100)/100;
       if(Math.abs(m.priceTtc-expected)>0.011) throw new Error('Ligne '+(i+1)+' ('+m.reference+') : prix TTC incohérent avec le HT et la TVA.');
       if(!Array.isArray(m.tierPrices)) throw new Error('Ligne '+(i+1)+' : tarifs par paliers invalides.');
       for(const t of m.tierPrices){
-        if(!t || ![1,2.5,5,10,15,20,25,50].includes(Number(t.lengthMl)) || !Number.isFinite(Number(t.priceHt)) || !Number.isFinite(Number(t.priceTtc)) || Number(t.priceHt)<0 || Number(t.priceTtc)<0) throw new Error('Ligne '+(i+1)+' : palier fournisseur invalide.');
+        if(!t||![1,2.5,5,10,15,20,25,50].includes(Number(t.lengthMl))||!Number.isFinite(Number(t.priceHt))||!Number.isFinite(Number(t.priceTtc))||Number(t.priceHt)<0||Number(t.priceTtc)<0) throw new Error('Ligne '+(i+1)+' : palier fournisseur invalide.');
         const tierExpected=Math.round(Number(t.priceHt)*(1+m.vat/100)*100)/100;
         if(Math.abs(Number(t.priceTtc)-tierExpected)>0.011) throw new Error('Ligne '+(i+1)+' ('+m.reference+') : TTC incohérent pour le palier '+t.lengthMl+' ML.');
       }
     }
-    const bySupplier={};
-    materials.forEach(m=>bySupplier[m.supplier]=(bySupplier[m.supplier]||0)+1);
-    const summary=Object.entries(bySupplier).map(([s,n])=>s+' : '+n).join('\n');
+    const bySupplier={}; materials.forEach(m=>bySupplier[m.supplier]=(bySupplier[m.supplier]||0)+1);
+    const summary=Object.entries(bySupplier).map(([name,n])=>name+' : '+n).join('\n');
     info.textContent=file.name+' — '+materials.length+' références vérifiées.';
-    if(!confirm('Importer '+materials.length+' références dans le catalogue fournisseurs Cloudflare ?\n\n'+summary+'\n\nCette opération envoie le catalogue sélectionné à Cloudflare. Les contacts, projets, photos et historiques ne sont pas modifiés.\n\nAssure-toi d’avoir une sauvegarde avant de continuer.')) return;
-    status.textContent='Envoi de '+materials.length+' références vers Cloudflare…';
-    await apiFetch('/materials/import',{method:'POST',body:JSON.stringify({materials})});
-    await loadMaterialCatalog();
+    if(!confirm('Importer '+materials.length+' références dans le catalogue local de cet appareil ?\n\n'+summary+'\n\nLe catalogue actuel sera remplacé. Les contacts, projets et photos ne seront pas modifiés. Le catalogue sera conservé dans ce navigateur.')) return;
+    status.textContent='Enregistrement local de '+materials.length+' références…';
+    const serialized=JSON.stringify(materials);
+    localStorage.setItem(MATERIAL_CACHE,serialized);
+    materialCatalog=materials;
     if(typeof renderMaterials==='function') renderMaterials();
     if(typeof renderQuoteLines==='function') renderQuoteLines();
-    status.textContent='✅ Import terminé : '+materialCatalog.length+' références chargées dans DECOSHIP.';
-    alert('Catalogue fournisseurs mis à jour : '+materialCatalog.length+' références disponibles.');
-  }catch(e){
-    status.textContent='❌ Import impossible : '+e.message;
-  }finally{
-    btn.disabled=false;
-    $('supplierCatalogJsonFile').value='';
-  }
+    if(apiToken){
+      status.textContent='Catalogue local enregistré. Envoi vers Cloudflare…';
+      try{
+        await apiFetch('/materials/import',{method:'POST',body:JSON.stringify({materials})});
+        await loadMaterialCatalog();
+        status.textContent='✅ '+materialCatalog.length+' références importées et synchronisées avec Cloudflare.';
+        alert('Catalogue fournisseurs importé et synchronisé : '+materialCatalog.length+' références.');
+      }catch(cloudError){
+        status.textContent='⚠️ '+materials.length+' références enregistrées localement, mais échec de synchronisation Cloudflare : '+(cloudError.message||cloudError);
+        alert('Le catalogue est enregistré sur cet appareil, mais Cloudflare n’a pas confirmé la réception. Ne réimporte pas tout de suite. Détail : '+(cloudError.message||cloudError));
+      }
+    }else{
+      status.textContent='✅ Import terminé : '+materialCatalog.length+' références enregistrées sur cet appareil. Connecte Cloudflare pour les synchroniser.';
+      alert('Catalogue fournisseurs importé localement : '+materialCatalog.length+' références. Connecte Cloudflare pour les synchroniser.');
+    }
+  }catch(e){status.textContent='❌ Import impossible : '+(e.message||e);}
+  finally{btn.disabled=false;$('supplierCatalogJsonFile').value='';}
 }
 $('chooseSupplierCatalogJson').addEventListener('click',()=> $('supplierCatalogJsonFile').click());
 $('supplierCatalogJsonFile').addEventListener('change',e=>importSupplierCatalogJson(e.target.files&&e.target.files[0]));
@@ -1629,7 +1813,17 @@ async function connectApi(){
   setLoginState('Connexion et lecture des données en cours…');
   try{
     await apiFetch('/health');
-    await seedMaterialCatalogIfEmpty();
+    const remoteCatalog=await apiFetch('/materials');
+    if(!Array.isArray(remoteCatalog.materials)||remoteCatalog.materials.length===0){
+      let localCatalog=[];
+      try{localCatalog=JSON.parse(localStorage.getItem(MATERIAL_CACHE)||'[]');}catch(_){localCatalog=[];}
+      if(!Array.isArray(localCatalog)||!localCatalog.length) localCatalog=DECOSHIP_MATERIAL_SEED;
+      if(Array.isArray(localCatalog)&&localCatalog.length){
+        setLoginState('Catalogue Cloudflare vide : transfert du catalogue local ('+localCatalog.length+' références)…');
+        await apiFetch('/materials/import',{method:'POST',body:JSON.stringify({materials:localCatalog})});
+      }
+    }
+    await loadMaterialCatalog();
     const changed=await pullCloud();
     $('cloudOverlay').style.display='none';
     setLoginState('✅ Cloudflare connecté. Fiches récupérées : '+changed,true);
@@ -1638,52 +1832,29 @@ async function connectApi(){
 }
 $('connectApi').onclick=connectApi;
 
-/* Démarrage normal : restauration de la configuration Cloudflare enregistrée.
-   Si aucune configuration n'existe, on affiche l'écran de connexion.
-   Les données locales restent conservées en cas d'échec réseau. */
-(async function bootCloudflare(){
-  const overlay=$('cloudOverlay');
-  const cfg=savedApiCfg();
-
-  if(cfg && cfg.url && cfg.token){
-    $('apiUrl').value=cfg.url;
-    $('apiToken').value=cfg.token;
-    apiBase=cfg.url;
-    apiToken=cfg.token;
-    setLoginState('Reconnexion à Cloudflare en cours…');
-
-    try{
-      await apiFetch('/health');
-      await seedMaterialCatalogIfEmpty();
-      const changed=await pullCloud();
-      if(overlay) overlay.style.display='none';
-      setLoginState('✅ Cloudflare connecté. Fiches récupérées : '+changed,true);
-    }catch(e){
-      console.error('Reconnexion Cloudflare:',e);
-      apiBase='';
-      apiToken='';
-      try{
-        materialCatalog=Array.isArray(DECOSHIP_MATERIAL_SEED)?DECOSHIP_MATERIAL_SEED:[];
-        localStorage.setItem(MATERIAL_CACHE,JSON.stringify(materialCatalog));
-      }catch(_){}
-      if(overlay) overlay.style.display='flex';
-      setLoginState('⚠️ Reconnexion automatique impossible : '+e.message+' — vérifie la connexion puis reconnecte-toi.');
-    }
-  }else{
-    try{
-      materialCatalog=Array.isArray(DECOSHIP_MATERIAL_SEED)?DECOSHIP_MATERIAL_SEED:[];
-      localStorage.setItem(MATERIAL_CACHE,JSON.stringify(materialCatalog));
-    }catch(_){
-      try{materialCatalog=JSON.parse(localStorage.getItem(MATERIAL_CACHE)||'[]');}
-      catch(__){materialCatalog=[];}
-    }
-    if(overlay) overlay.style.display='flex';
-    setLoginState('Saisis le code d’accès DECOSHIP pour activer la synchronisation Cloudflare.');
+/* V21.5 : démarrage local conservé, connexion Cloudflare proposée à l’ouverture. */
+async function bootOffline(){
+  try{
+    await migrateOldContacts();
+    const cached=JSON.parse(localStorage.getItem(MATERIAL_CACHE)||'null');
+    materialCatalog=Array.isArray(cached)&&cached.length?cached:(Array.isArray(DECOSHIP_MATERIAL_SEED)?DECOSHIP_MATERIAL_SEED:[]);
+    if(!localStorage.getItem(MATERIAL_CACHE))try{localStorage.setItem(MATERIAL_CACHE,JSON.stringify(materialCatalog));}catch(e){}
+    if(typeof render==='function') await render();
+    if(window.refreshPlanning) await window.refreshPlanning();
+  }catch(e){
+    console.error('Démarrage DECOSHIP :',e);
+    alert('DECOSHIP n’a pas pu démarrer : '+(e.message||e));
   }
+}
+(function prepareCloudflareLogin(){
+  const cfg=savedApiCfg();
+  if(cfg&&cfg.url){$('apiUrl').value=cfg.url;}
+  /* Le secret reste mémorisé localement comme dans les versions précédentes ;
+     le champ n’est pas prérempli pour éviter de l’exposer à l’écran. */
+  $('cloudOverlay').style.display='flex';
 })();
+bootOffline();
 
-/* Relecture périodique légère pour actualiser les autres appareils. */
-setInterval(async()=>{if(apiToken&&!document.hidden){try{await pullCloud();}catch(e){console.warn('Actualisation cloud:',e);}}},60000);
 
 </script>
 </body>
