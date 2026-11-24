@@ -244,11 +244,11 @@ main{max-width:none;width:100%;padding:14px 18px}
 <div class="card">
 <div class="row"><div><label>Nom / Prénom</label><input id="name" autocomplete="name" placeholder="Jean Dupont"></div><div><label>Société</label><input id="company" placeholder="Entreprise"></div></div>
 <div><label>Nom du bateau</label><input id="boat" placeholder="Nom du bateau"></div>
-<div id="clientStatusField"><label>Statut du client</label><select id="clientStatusSelect" aria-label="Statut du client"><option>Demande</option><option>RDV</option><option>Devis à réaliser</option><option>Devis envoyé</option><option>Produit</option><option>À poser</option><option>Posé</option><option>Terminé</option></select></div>
+<div id="clientStatusField"><label>Statut du client</label><select id="clientStatusSelect" aria-label="Statut du client"><option>Demande</option><option>RDV</option><option>Devis à réaliser</option><option>Devis envoyé</option><option>À produire</option><option>Produit</option><option>À poser</option><option>Posé</option><option>Terminé</option></select></div>
 <div class="row"><div><label>Téléphone</label><input id="phone" type="tel" placeholder="06 00 00 00 00"></div><div><label>E-mail</label><input id="email" type="email" placeholder="contact@entreprise.fr"></div></div>
 <label>Bateau / Projet</label><input id="project" placeholder="Catamaran, covering, décoration…">
 <div class="row"><div><label>Statut du projet</label><select id="status" aria-label="Statut du projet">
-<option>Demande</option><option>RDV</option><option>Devis à réaliser</option><option>Devis envoyé</option><option>Produit</option><option>À poser</option><option>Posé</option><option>Terminé</option>
+<option>Demande</option><option>RDV</option><option>Devis à réaliser</option><option>Devis envoyé</option><option>À produire</option><option>Produit</option><option>À poser</option><option>Posé</option><option>Terminé</option>
 </select></div><div><label>Rappel</label><input id="follow" type="date"></div></div>
 <div class="financeBox">
 <h3>💶 Suivi financier</h3>
@@ -508,11 +508,10 @@ function normalizeStatus(s){
     'Accepté':'Produit',
     'Acompte':'Produit',
     'À facturer':'À poser',
-    'À produire':'Produit',
     'À produire/poser':'Produit'
   };
   const value=map[String(s||'').trim()]||String(s||'').trim();
-  return ['Demande','RDV','Devis à réaliser','Devis envoyé','Produit','À poser','Posé','Terminé'].includes(value)?value:'Demande';
+  return ['Demande','RDV','Devis à réaliser','Devis envoyé','À produire','Produit','À poser','Posé','Terminé'].includes(value)?value:'Demande';
 }
 function normalizeContact(c){
   if(!c) return c;
@@ -547,7 +546,7 @@ function statusClass(s){
   return {
     'Demande':'status-demande','RDV':'status-rdv','Rendez-vous':'status-rdv',
     'Devis à réaliser':'status-attente','Devis envoyé':'status-attente','En attente':'status-attente',
-    'Produit':'status-production','À poser':'status-production','Posé':'status-production',
+    'Produit':'status-production','À produire':'status-attente','À poser':'status-production','Posé':'status-production',
     'À produire/poser':'status-production','Terminé':'status-termine'
   }[s]||'status-demande';
 }
@@ -734,7 +733,7 @@ function addMaterial(){editingMaterials.push({name:'',brand:'',reference:'',colo
 
 const quoteTypes=['Covering','Refit intérieur','Découpe adhésive','Panneaux publicitaires','Impressions numériques','Divers'];
 function newQuoteLine(type='Covering'){
- const base={type,description:'',pricing:'calculated',materialName:'',catalogId:'',quantity:0,unit:'ML',purchaseUnit:0,coefficient:2,manualSale:0,hours:0,hourly:0,items:[],tierPrices:[],purchasePlan:{},vat:20};
+ const base={type,status:'À produire',description:'',pricing:'calculated',materialName:'',catalogId:'',quantity:0,unit:'ML',purchaseUnit:0,coefficient:2,manualSale:0,hours:0,hourly:0,items:[],tierPrices:[],purchasePlan:{},vat:20};
  if(type==='Textes adhésifs') return {...base,items:[{text:'',color:'',colorCatalogId:'',length:'',font:'',sale:0}],estimatedMaterialCost:0,hours:0,hourly:0};
  if(type==='Découpe adhésive') return {...base,items:[{description:'',supplier:'',catalogId:'',product:'',brand:'',reference:'',color:'',length:0,priceTtc:0,vat:20,coefficient:2}]};
  if(type==='Panneaux publicitaires'||type==='Impression numérique') return {...base,items:[{description:'',length:0,height:0,supplier:'',catalogId:'',purchase:0,sale:0}]};
@@ -808,7 +807,7 @@ function renderQuoteLines(){
     </div></div>`).join('')}
     <button type="button" class="alt" data-addsub="${i}">＋ Ajouter une ligne Divers</button>`;
   }
-  return `<div class="materialRow" data-qline="${i}"><div class="materialRowHead"><div class="materialRowTitle">Prestation ${i+1} – ${esc(l.type)}</div><button type="button" class="materialDelete danger" data-qdelete="${i}">Supprimer</button></div><div class="materialGrid"><div class="full"><label>Type de prestation</label><select data-qfield="type">${quoteTypes.map(t=>`<option value="${esc(t)}" ${l.type===t?'selected':''}>${esc(t)}</option>`).join('')}</select></div>${body}</div><div class="materialSummary" data-qsummary></div></div>`;
+  return `<div class="materialRow" data-qline="${i}"><div class="materialRowHead"><div class="materialRowTitle">Prestation ${i+1} – ${esc(l.type)}</div><button type="button" class="materialDelete danger" data-qdelete="${i}">Supprimer</button></div><div class="materialGrid"><div class="full"><label>Type de prestation</label><select data-qfield="type">${quoteTypes.map(t=>`<option value="${esc(t)}" ${l.type===t?'selected':''}>${esc(t)}</option>`).join('')}</select></div><div class="full"><label>Statut de cette prestation</label><select data-qfield="status">${['Demande','RDV','Devis à réaliser','Devis envoyé','À produire','Produit','À poser','Posé','Terminé'].map(v=>`<option value="${v}" ${(l.status||'À produire')===v?'selected':''}>${v}</option>`).join('')}</select></div>${body}</div><div class="materialSummary" data-qsummary></div></div>`;
  }).join('');
  host.querySelectorAll('[data-qline]').forEach(card=>{
   const i=Number(card.dataset.qline),line=editingQuoteLines[i];
@@ -1292,13 +1291,13 @@ function normalizeClientStatus(value){
  const map={
   'Rendez-vous':'RDV','RDV':'RDV','Devis':'Devis à réaliser','En attente':'Devis à réaliser',
   'Devis réalisé':'Devis à réaliser','Devis envoyé':'Devis envoyé',
-  'À produire/poser':'Produit','À produire':'Produit','Produit':'Produit',
+  'À produire/poser':'Produit','Produit':'Produit',
   'À poser':'À poser','Posé':'Posé','Terminé':'Terminé',
   'Demande':'Demande','À commander':'Demande','À rappeler':'Devis à réaliser','À encaisser':'Devis à réaliser',
   'Accepté':'Produit','Acompte':'Produit','À facturer':'À poser'
  };
  const n=map[v]||v;
- return ['Demande','RDV','Devis à réaliser','Devis envoyé','Produit','À poser','Posé','Terminé'].includes(n)?n:'Demande';
+ return ['Demande','RDV','Devis à réaliser','Devis envoyé','À produire','Produit','À poser','Posé','Terminé'].includes(n)?n:'Demande';
 }
 function getContactClientStatus(c){
  if(!c)return 'Demande';
@@ -1401,7 +1400,7 @@ async function showContact(id){
   const currentClientStatus=getContactClientStatus(x);
   h+='<div class="detailTopLayout"><div class="detailInfoBox">'+row('Nom',x.name)+row('Téléphone',x.phone)+row('E-mail',x.email)+row('Emplacement',x.boat||x.company)+'</div>'+
     '<div class="detailStatusBox"><div class="detailLabel">STATUT</div><select aria-label="Statut du client" onchange="saveClientStatus('+Number(x.id)+',this.value)">'+
-    ['Demande','RDV','Devis à réaliser','Devis envoyé','Produit','À poser','Posé','Terminé'].map(v=>'<option value="'+v+'" '+(currentClientStatus===v?'selected':'')+'>'+v+'</option>').join('')+
+    ['Demande','RDV','Devis à réaliser','Devis envoyé','À produire','Produit','À poser','Posé','Terminé'].map(v=>'<option value="'+v+'" '+(currentClientStatus===v?'selected':'')+'>'+v+'</option>').join('')+
     '</select></div><button type="button" class="detailReturn" onclick="view(&quot;list&quot;)">◀ Retour</button></div>';
   h+='<div class="detailProjectsArea"><div class="detailRow"><div class="detailLabel">Projets</div><div class="projectActions"><button onclick="newProject('+x.id+')">➕ Nouveau projet</button></div>'
     +'<div class="muted" style="margin-top:8px">Chaque projet possède son statut, son montant de devis et son montant de facture, en plus de ses photos et notes.</div></div>';
