@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="fr">
 <head>
+<!-- DECOSHIP V21.9 : choix du film unifié, recherche intelligente dans tout le catalogue pour chaque prestation. -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -741,8 +742,10 @@ function newQuoteLine(type='Covering'){
  if(type==='Divers') return {...base,items:[{description:'',supplier:'',purchase:0,sale:0}]};
  return base;
 }
-function catalogSearchMarkup(i,j,kind='material'){
- return `<div class="full"><label>Recherche instantanée dans le catalogue fournisseurs</label><input type="search" data-subsearch="${i}-${j}" data-kind="${kind}" placeholder="Fournisseur, marque, référence ou couleur…" autocomplete="off"><select data-subcatalog="${i}-${j}" data-kind="${kind}"><option value="">Choisir dans le catalogue…</option></select><div class="catalogSearchHint">La liste se filtre pendant la saisie.</div></div>`;
+function quoteFilmSearchMarkup(line){
+ const selected=(materialCatalog||[]).find(x=>x.id===line.catalogId);
+ const label=selected?[selected.supplier,selected.brand,selected.reference,selected.color||selected.product].filter(Boolean).join(' · '):(line.materialName||'');
+ return `<div class="full catalogPicker"><label><b>Choix du film</b></label><input type="search" data-film-search placeholder="Tape les premières lettres : fournisseur, marque, référence ou couleur…" autocomplete="off"><select data-film-select><option value="">Tape les premières lettres pour rechercher dans tout le catalogue…</option>${selected?`<option value="${esc(selected.id)}" selected>${esc(label)}</option>`:''}</select><div class="catalogSearchHint" data-film-selected>${label?'Film sélectionné : '+esc(label):'Recherche intelligente dans toutes les références et tous les fournisseurs.'}</div></div>`;
 }
 function renderQuoteLines(){
  const host=$('quoteLines'); if(!host)return;
@@ -765,7 +768,6 @@ function renderQuoteLines(){
   if(l.type==='Covering'||l.type==='Refit intérieur'){
    body=`<div class="full"><label>${l.type==='Refit intérieur'?'Description du refit intérieur':'Description du covering'}</label><input data-qfield="description" value="${esc(l.description||'')}" placeholder="${l.type==='Refit intérieur'?'Ex. Habillage intérieur cabine, cloisons, meubles…':'Ex. Covering intérieur cabine'}"></div>
    <div class="full"><label>Mode de calcul</label><select data-qfield="pricing"><option value="calculated" ${l.pricing!=='manual'?'selected':''}>Matière + coefficient de marge + main-d’œuvre</option><option value="manual" ${l.pricing==='manual'?'selected':''}>Prix de vente saisi manuellement</option></select></div>
-   ${catalogSearchMarkup(i,0)}
    <div class="full"><label>Matière / support</label><input data-qfield="materialName" value="${esc(l.materialName||'')}" placeholder="Référence, couleur, support…"></div>
    <div><label>Quantité consommée (ML)</label><input type="number" min="0" step="0.01" data-qfield="quantity" value="${l.quantity??0}"></div>
    <div><label>Prix d’achat unitaire TTC (€ / ML)</label><input type="number" min="0" step="0.01" data-qfield="purchaseUnit" value="${l.purchaseUnit??0}"></div>
@@ -776,12 +778,12 @@ function renderQuoteLines(){
    <div><label>Taux horaire facturé (€ / h)</label><input type="number" min="0" step="0.01" data-qfield="hourly" value="${l.hourly??0}"></div>`;
   } else if(l.type==='Découpe adhésive'){
    body=`<div class="full"><div class="muted">Ajoute chaque référence à découper. Le prix de vente matière est calculé pour chaque ligne à partir du prix fournisseur TTC au mètre et du coefficient de marge. La main-d’œuvre est calculée séparément.</div></div>
-    ${l.items.map((it,j)=>`<div class="full materialRow" data-subitem="${i}-${j}"><div class="materialRowHead"><b>Référence à découper ${j+1}</b><button type="button" class="danger materialDelete" data-subdelete="${i}-${j}">Supprimer</button></div><div class="materialGrid">${catalogSearchMarkup(i,j,'material')}<div class="full catalogMeta">${esc([it.supplier,it.brand,it.reference,it.color].filter(Boolean).join(' · ')||'Sélectionne une référence du catalogue fournisseurs.')}</div><div><label>Longueur à découper (ML)</label><input type="number" min="0" step="0.01" data-itemfield="length" data-parent="${i}" data-item="${j}" value="${it.length??0}"></div><div><label>Prix fournisseur TTC / ML (€)</label><input type="number" min="0" step="0.01" data-itemfield="priceTtc" data-parent="${i}" data-item="${j}" value="${it.priceTtc??0}"></div><div><label>Coefficient de marge</label><input type="number" min="0.01" step="0.01" data-itemfield="coefficient" data-parent="${i}" data-item="${j}" value="${it.coefficient??2}"></div><div><label>Prix de vente matière TTC (€)</label><input readonly value="${((Number(it.length)||0)*(Number(it.priceTtc)||0)*(Number(it.coefficient)||0)).toFixed(2)}"></div></div></div>`).join('')}
+    ${l.items.map((it,j)=>`<div class="full materialRow" data-subitem="${i}-${j}"><div class="materialRowHead"><b>Référence à découper ${j+1}</b><button type="button" class="danger materialDelete" data-subdelete="${i}-${j}">Supprimer</button></div><div class="materialGrid"><div class="full catalogMeta">${esc([it.supplier,it.brand,it.reference,it.color].filter(Boolean).join(' · ')||'Sélectionne une référence du catalogue fournisseurs.')}</div><div><label>Longueur à découper (ML)</label><input type="number" min="0" step="0.01" data-itemfield="length" data-parent="${i}" data-item="${j}" value="${it.length??0}"></div><div><label>Prix fournisseur TTC / ML (€)</label><input type="number" min="0" step="0.01" data-itemfield="priceTtc" data-parent="${i}" data-item="${j}" value="${it.priceTtc??0}"></div><div><label>Coefficient de marge</label><input type="number" min="0.01" step="0.01" data-itemfield="coefficient" data-parent="${i}" data-item="${j}" value="${it.coefficient??2}"></div><div><label>Prix de vente matière TTC (€)</label><input readonly value="${((Number(it.length)||0)*(Number(it.priceTtc)||0)*(Number(it.coefficient)||0)).toFixed(2)}"></div></div></div>`).join('')}
     <button type="button" class="alt" data-addsub="${i}">＋ Ajouter une référence à découper</button>
     <div class="full"><label>Main-d’œuvre – nombre d’heures</label><input type="number" min="0" step="0.25" data-qfield="hours" value="${l.hours??0}"></div><div><label>Taux horaire facturé (€ / h)</label><input type="number" min="0" step="0.01" data-qfield="hourly" value="${l.hourly??0}"></div>`;
   } else if(l.type==='Textes adhésifs'){
    body=`<div class="full"><label>Textes adhésifs</label><div class="muted">Ajoute chaque texte séparément. Pas de métrage matière : seule la couleur est sélectionnée dans le catalogue.</div></div>
-   ${l.items.map((it,j)=>`<div class="full materialRow" data-subitem="${i}-${j}"><div class="materialRowHead"><b>Texte ${j+1}</b><button type="button" class="danger materialDelete" data-subdelete="${i}-${j}">Supprimer</button></div><div class="materialGrid"><div class="full"><label>Texte à découper</label><input data-itemfield="text" data-parent="${i}" data-item="${j}" value="${esc(it.text||'')}" placeholder="Saisir le texte adhésif"></div>${catalogSearchMarkup(i,j,'color')}<div><label>Couleur sélectionnée</label><input data-itemfield="color" data-parent="${i}" data-item="${j}" value="${esc(it.color||'')}" placeholder="Couleur"></div><div><label>Longueur du texte (cm)</label><input type="number" min="0" step="0.1" data-itemfield="length" data-parent="${i}" data-item="${j}" value="${it.length??''}"></div><div><label>Police de caractère</label><input data-itemfield="font" data-parent="${i}" data-item="${j}" value="${esc(it.font||'')}" placeholder="Ex. Arial, Helvetica, script…"></div><div><label>Prix de vente TTC (€)</label><input type="number" min="0" step="0.01" data-itemfield="sale" data-parent="${i}" data-item="${j}" value="${it.sale??0}"></div></div></div>`).join('')}
+   ${l.items.map((it,j)=>`<div class="full materialRow" data-subitem="${i}-${j}"><div class="materialRowHead"><b>Texte ${j+1}</b><button type="button" class="danger materialDelete" data-subdelete="${i}-${j}">Supprimer</button></div><div class="materialGrid"><div class="full"><label>Texte à découper</label><input data-itemfield="text" data-parent="${i}" data-item="${j}" value="${esc(it.text||'')}" placeholder="Saisir le texte adhésif"></div><div><label>Couleur sélectionnée</label><input data-itemfield="color" data-parent="${i}" data-item="${j}" value="${esc(it.color||'')}" placeholder="Couleur"></div><div><label>Longueur du texte (cm)</label><input type="number" min="0" step="0.1" data-itemfield="length" data-parent="${i}" data-item="${j}" value="${it.length??''}"></div><div><label>Police de caractère</label><input data-itemfield="font" data-parent="${i}" data-item="${j}" value="${esc(it.font||'')}" placeholder="Ex. Arial, Helvetica, script…"></div><div><label>Prix de vente TTC (€)</label><input type="number" min="0" step="0.01" data-itemfield="sale" data-parent="${i}" data-item="${j}" value="${it.sale??0}"></div></div></div>`).join('')}
    <button type="button" class="alt" data-addsub="${i}">＋ Ajouter une ligne de texte</button>
    <div class="full"><label>Coût matière estimé pour l’ensemble des textes TTC (€)</label><input type="number" min="0" step="0.01" data-qfield="estimatedMaterialCost" value="${l.estimatedMaterialCost??0}"></div>
    <div class="full"><label>Main-d’œuvre – nombre d’heures</label><input type="number" min="0" step="0.25" data-qfield="hours" value="${l.hours??0}"></div><div><label>Taux horaire facturé (€ / h)</label><input type="number" min="0" step="0.01" data-qfield="hourly" value="${l.hourly??0}"></div>`;
@@ -808,7 +810,7 @@ function renderQuoteLines(){
     </div></div>`).join('')}
     <button type="button" class="alt" data-addsub="${i}">＋ Ajouter une ligne Divers</button>`;
   }
-  return `<div class="materialRow" data-qline="${i}"><div class="materialRowHead"><div class="materialRowTitle">Prestation ${i+1} – ${esc(l.type)}</div><button type="button" class="materialDelete danger" data-qdelete="${i}">Supprimer</button></div><div class="materialGrid"><div class="full"><label>Type de prestation</label><select data-qfield="type">${quoteTypes.map(t=>`<option value="${esc(t)}" ${l.type===t?'selected':''}>${esc(t)}</option>`).join('')}</select></div><div class="full"><label>Statut de cette prestation</label><select data-qfield="status">${['Demande','RDV','Devis à réaliser','Devis envoyé','À produire','Produit','À poser','Posé','Terminé'].map(v=>`<option value="${v}" ${(l.status||'À produire')===v?'selected':''}>${v}</option>`).join('')}</select></div>${body}</div><div class="materialSummary" data-qsummary></div></div>`;
+  return `<div class="materialRow" data-qline="${i}"><div class="materialRowHead"><div class="materialRowTitle">Prestation ${i+1} – ${esc(l.type)}</div><button type="button" class="materialDelete danger" data-qdelete="${i}">Supprimer</button></div><div class="materialGrid"><div class="full"><label>Type de prestation</label><select data-qfield="type">${quoteTypes.map(t=>`<option value="${esc(t)}" ${l.type===t?'selected':''}>${esc(t)}</option>`).join('')}</select></div><div class="full"><label>Statut de cette prestation</label><select data-qfield="status">${['Demande','RDV','Devis à réaliser','Devis envoyé','À produire','Produit','À poser','Posé','Terminé'].map(v=>`<option value="${v}" ${(l.status||'À produire')===v?'selected':''}>${v}</option>`).join('')}</select></div>${quoteFilmSearchMarkup(l)}${body}</div><div class="materialSummary" data-qsummary></div></div>`;
  }).join('');
  host.querySelectorAll('[data-qline]').forEach(card=>{
   const i=Number(card.dataset.qline),line=editingQuoteLines[i];
@@ -856,21 +858,48 @@ function renderQuoteLines(){
    });
   });
 
-  card.querySelectorAll('[data-subsearch]').forEach(search=>{
-   const key=search.dataset.subsearch.split('-').map(Number),j=key[1],select=card.querySelector(`[data-subcatalog="${search.dataset.subsearch}"]`),kind=search.dataset.kind;
-   const refresh=()=>{
-    const norm=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
-    const q=norm(search.value);
-    const source=(materialCatalog||[]).filter(x=>line.type!=='Refit intérieur'||norm(x.supplier)==='tego');
-    const matches=source.filter(x=>{
-      const vals=kind==='color'?[x.color,x.supplier,x.brand,x.reference]:[x.product,x.supplier,x.brand,x.reference,x.color,x.family];
-      return !q||vals.some(v=>norm(v).includes(q));
-    }); // V21.8 : ne pas limiter à 200 résultats, certains fournisseurs/marques (ex. ARLON) se trouvent après la 200e référence.
-    select.innerHTML='<option value="">'+(matches.length?matches.length+' résultat(s) — choisir…':'Aucune référence TEGO trouvée')+'</option>'+matches.map(x=>`<option value="${esc(x.id)}">${esc([x.supplier,x.brand,x.reference,x.color||x.product].filter(Boolean).join(' · '))}</option>`).join('');
+  const filmSearch=card.querySelector('[data-film-search]');
+  const filmSelect=card.querySelector('[data-film-select]');
+  if(filmSearch&&filmSelect){
+   const norm=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+   const renderFilmMatches=()=>{
+    const q=norm(filmSearch.value);
+    if(!q){filmSelect.innerHTML='<option value="">Tape les premières lettres pour rechercher dans tout le catalogue…</option>';return;}
+    const matches=(materialCatalog||[]).map(x=>{
+      const fields=[x.supplier,x.brand,x.reference,x.color,x.product,x.family,x.productType].map(norm);
+      const starts=fields.some(v=>v.startsWith(q));
+      const contains=fields.some(v=>v.includes(q));
+      return {x,starts,contains};
+    }).filter(v=>v.contains).sort((a,b)=>Number(b.starts)-Number(a.starts)||String(a.x.supplier||'').localeCompare(String(b.x.supplier||''),'fr')||String(a.x.brand||'').localeCompare(String(b.x.brand||''),'fr')||String(a.x.reference||'').localeCompare(String(b.x.reference||''),'fr'));
+    filmSelect.innerHTML='<option value="">'+(matches.length?matches.length+' référence(s) trouvée(s) — choisir…':'Aucun film trouvé dans le catalogue')+'</option>'+matches.map(({x})=>`<option value="${esc(x.id)}">${esc([x.supplier,x.brand,x.reference,x.color||x.product].filter(Boolean).join(' · '))}</option>`).join('');
    };
-   refresh();search.addEventListener('input',refresh);select.addEventListener('change',()=>{const found=(materialCatalog||[]).find(x=>x.id===select.value);if(!found)return;const it=line.items[j]||(line.items[j]={});if(kind==='color'){it.color=found.color||found.product||'';it.colorCatalogId=found.id;}else{it.catalogId=found.id;it.supplier=found.supplier||'';it.purchase=Number(found.priceTtc)||Number(it.purchase)||0;it.description=it.description||found.product||found.reference||'';if(line.type==='Covering'||line.type==='Refit intérieur'){line.catalogId=found.id;line.materialName=[found.supplier,found.brand,found.reference,found.color].filter(Boolean).join(' · ');line.purchaseUnit=Number(found.priceTtc)||0;line.unit=found.unit==='U'?'U':'ML';line.vat=Number(found.vat)||20;line.tierPrices=(Array.isArray(found.tierPrices)&&found.tierPrices.length)?found.tierPrices.map(t=>({...t})):([1,2.5,5,10,15,20,25,50].map(lengthMl=>({lengthMl,priceHt:0,priceTtc:0})));line.purchasePlan=line.purchasePlan||{};}else if(line.type==='Découpe adhésive'){it.product=found.product||'';it.brand=found.brand||'';it.reference=found.reference||'';it.color=found.color||'';it.priceTtc=Number(found.priceTtc)||0;it.vat=Number(found.vat)||20;it.coefficient=Number(it.coefficient)||Number(line.coefficient)||2;}}renderQuoteLines();});
-  });
-  card.querySelectorAll('[data-addsub]').forEach(btn=>btn.onclick=()=>{const t=line.type;const item=t==='Textes adhésifs'?{text:'',color:'',length:'',font:'',sale:0}:t==='Découpe adhésive'?{description:'',supplier:'',catalogId:'',product:'',brand:'',reference:'',color:'',length:0,priceTtc:0,vat:20,coefficient:2}:t==='Divers'?{description:'',supplier:'',purchase:0,sale:0}:{description:'',length:0,height:0,supplier:'',purchase:0,sale:0};line.items.push(item);renderQuoteLines();});
+   filmSearch.addEventListener('input',renderFilmMatches);
+   filmSelect.addEventListener('change',()=>{
+    const found=(materialCatalog||[]).find(x=>String(x.id)===String(filmSelect.value));
+    if(!found)return;
+    line.catalogId=found.id;
+    line.supplier=found.supplier||'';
+    line.brand=found.brand||'';
+    line.reference=found.reference||'';
+    line.color=found.color||'';
+    line.materialName=[found.supplier,found.brand,found.reference,found.color||found.product].filter(Boolean).join(' · ');
+    line.purchaseUnit=Number(found.priceTtc)||Number(line.purchaseUnit)||0;
+    line.unit=found.unit==='U'?'U':'ML';
+    line.vat=Number(found.vat)||20;
+    line.tierPrices=(Array.isArray(found.tierPrices)&&found.tierPrices.length)?found.tierPrices.map(t=>({...t})):line.tierPrices||[];
+    line.purchasePlan=line.purchasePlan||{};
+    if(line.type==='Découpe adhésive'){
+      line.items=(line.items||[]).map(it=>({...it,catalogId:found.id,supplier:found.supplier||'',product:found.product||'',brand:found.brand||'',reference:found.reference||'',color:found.color||'',priceTtc:Number(found.priceTtc)||0,vat:Number(found.vat)||20}));
+    } else if(line.type==='Textes adhésifs'){
+      line.items=(line.items||[]).map(it=>({...it,color:it.color||found.color||'',colorCatalogId:it.colorCatalogId||found.id}));
+    } else if(line.type==='Panneaux publicitaires'||line.type==='Impressions numériques'||line.type==='Divers'){
+      line.items=(line.items||[]).map(it=>({...it,supplier:found.supplier||it.supplier||'',catalogId:found.id,product:found.product||found.reference||it.product||'',brand:found.brand||it.brand||'',reference:found.reference||it.reference||''}));
+    }
+    renderQuoteLines();
+   });
+  }
+
+  card.querySelectorAll('[data-addsub]').forEach(btn=>btn.onclick=()=>{const t=line.type;const item=t==='Textes adhésifs'?{text:'',color:line.color||'',colorCatalogId:line.catalogId||'',length:'',font:'',sale:0}:t==='Découpe adhésive'?{description:'',supplier:line.supplier||'',catalogId:line.catalogId||'',product:line.reference||'',brand:line.brand||'',reference:line.reference||'',color:line.color||'',length:0,priceTtc:Number(line.purchaseUnit)||0,vat:Number(line.vat)||20,coefficient:2}:t==='Divers'?{description:'',supplier:line.supplier||'',catalogId:line.catalogId||'',purchase:0,sale:0}:{description:'',length:0,height:0,supplier:line.supplier||'',catalogId:line.catalogId||'',purchase:0,sale:0};line.items.push(item);renderQuoteLines();});
   card.querySelectorAll('[data-subdelete]').forEach(btn=>btn.onclick=()=>{const j=Number(btn.dataset.subdelete.split('-')[1]);line.items.splice(j,1);renderQuoteLines();});
   card.querySelector('[data-qdelete]').onclick=()=>{editingQuoteLines.splice(i,1);renderQuoteLines();};
  });
