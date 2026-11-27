@@ -194,6 +194,7 @@ main{max-width:none;width:100%;padding:14px 18px}
   <div class="sideTile">
    <div class="sideTitle">Catalogue<br>fournisseur</div><span class="sideIcon">📚</span>
    <button class="orange" type="button" id="sideCatalog">Importer un fichier JSON</button>
+    <div id="supplierCatalogSidebarStatus" class="muted" role="status" style="margin-top:7px;font-size:12px;line-height:1.35"></div>
   </div>
   <div class="sideTile">
    <div class="sideTitle">Contacts</div><span class="sideIcon">📒</span>
@@ -864,7 +865,7 @@ function renderQuoteLines(){
     const matches=source.filter(x=>{
       const vals=kind==='color'?[x.color,x.supplier,x.brand,x.reference]:[x.product,x.supplier,x.brand,x.reference,x.color,x.family];
       return !q||vals.some(v=>norm(v).includes(q));
-    }).slice(0,200);
+    }); // V21.8 : ne pas limiter à 200 résultats, certains fournisseurs/marques (ex. ARLON) se trouvent après la 200e référence.
     select.innerHTML='<option value="">'+(matches.length?matches.length+' résultat(s) — choisir…':'Aucune référence TEGO trouvée')+'</option>'+matches.map(x=>`<option value="${esc(x.id)}">${esc([x.supplier,x.brand,x.reference,x.color||x.product].filter(Boolean).join(' · '))}</option>`).join('');
    };
    refresh();search.addEventListener('input',refresh);select.addEventListener('change',()=>{const found=(materialCatalog||[]).find(x=>x.id===select.value);if(!found)return;const it=line.items[j]||(line.items[j]={});if(kind==='color'){it.color=found.color||found.product||'';it.colorCatalogId=found.id;}else{it.catalogId=found.id;it.supplier=found.supplier||'';it.purchase=Number(found.priceTtc)||Number(it.purchase)||0;it.description=it.description||found.product||found.reference||'';if(line.type==='Covering'||line.type==='Refit intérieur'){line.catalogId=found.id;line.materialName=[found.supplier,found.brand,found.reference,found.color].filter(Boolean).join(' · ');line.purchaseUnit=Number(found.priceTtc)||0;line.unit=found.unit==='U'?'U':'ML';line.vat=Number(found.vat)||20;line.tierPrices=(Array.isArray(found.tierPrices)&&found.tierPrices.length)?found.tierPrices.map(t=>({...t})):([1,2.5,5,10,15,20,25,50].map(lengthMl=>({lengthMl,priceHt:0,priceTtc:0})));line.purchasePlan=line.purchasePlan||{};}else if(line.type==='Découpe adhésive'){it.product=found.product||'';it.brand=found.brand||'';it.reference=found.reference||'';it.color=found.color||'';it.priceTtc=Number(found.priceTtc)||0;it.vat=Number(found.vat)||20;it.coefficient=Number(it.coefficient)||Number(line.coefficient)||2;}}renderQuoteLines();});
@@ -1744,14 +1745,18 @@ async function seedMaterialCatalogIfEmpty(){
 ;
 async function importSupplierCatalogJson(file){
   const status=$('supplierCatalogSyncStatus');
+  const sidebarStatus=$('supplierCatalogSidebarStatus');
   const info=$('supplierCatalogFileInfo');
   const btn=$('chooseSupplierCatalogJson');
-  if(!file)return;
-  if(file.size>5*1024*1024){status.textContent='Fichier trop volumineux (maximum 5 Mo).';return;}
-  btn.disabled=true;
-  status.textContent='Lecture et vérification du fichier JSON…';
+  const sideBtn=$('sideCatalog');
+  const showStatus=(message)=>{if(status)status.textContent=message;if(sidebarStatus)sidebarStatus.textContent=message;};
+  const readFile=(f)=>new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result||''));reader.onerror=()=>reject(reader.error||new Error('Lecture du fichier impossible.'));reader.readAsText(f,'UTF-8');});
+  if(!file){showStatus('Aucun fichier sélectionné.');return;}
+  if(file.size>5*1024*1024){showStatus('Fichier trop volumineux (maximum 5 Mo).');return;}
+  if(btn)btn.disabled=true;if(sideBtn)sideBtn.disabled=true;
+  showStatus('Lecture et vérification du fichier JSON…');
   try{
-    const raw=await file.text();
+    const raw=await readFile(file);
     const materials=JSON.parse(raw);
     if(!Array.isArray(materials)||materials.length===0) throw new Error('Le JSON doit contenir une liste de références (tableau).');
     const required=['id','supplier','family','product','brand','reference','color','widthCm','unit','priceHt','vat','priceTtc','swatch','link','notes','tierPrices'];
@@ -1779,29 +1784,29 @@ async function importSupplierCatalogJson(file){
     const summary=Object.entries(bySupplier).map(([name,n])=>name+' : '+n).join('\n');
     info.textContent=file.name+' — '+materials.length+' références vérifiées.';
     if(!confirm('Importer '+materials.length+' références dans le catalogue local de cet appareil ?\n\n'+summary+'\n\nLe catalogue actuel sera remplacé. Les contacts, projets et photos ne seront pas modifiés. Le catalogue sera conservé dans ce navigateur.')) return;
-    status.textContent='Enregistrement local de '+materials.length+' références…';
+    showStatus('Enregistrement local de '+materials.length+' références…');
     const serialized=JSON.stringify(materials);
     localStorage.setItem(MATERIAL_CACHE,serialized);
     materialCatalog=materials;
     if(typeof renderMaterials==='function') renderMaterials();
     if(typeof renderQuoteLines==='function') renderQuoteLines();
     if(apiToken){
-      status.textContent='Catalogue local enregistré. Envoi vers Cloudflare…';
+      showStatus('Catalogue local enregistré. Envoi vers Cloudflare…');
       try{
         await apiFetch('/materials/import',{method:'POST',body:JSON.stringify({materials})});
         await loadMaterialCatalog();
-        status.textContent='✅ '+materialCatalog.length+' références importées et synchronisées avec Cloudflare.';
+        showStatus('✅ '+materialCatalog.length+' références importées et synchronisées avec Cloudflare.');
         alert('Catalogue fournisseurs importé et synchronisé : '+materialCatalog.length+' références.');
       }catch(cloudError){
-        status.textContent='⚠️ '+materials.length+' références enregistrées localement, mais échec de synchronisation Cloudflare : '+(cloudError.message||cloudError);
+        showStatus('⚠️ '+materials.length+' références enregistrées localement, mais échec de synchronisation Cloudflare : '+(cloudError.message||cloudError));
         alert('Le catalogue est enregistré sur cet appareil, mais Cloudflare n’a pas confirmé la réception. Ne réimporte pas tout de suite. Détail : '+(cloudError.message||cloudError));
       }
     }else{
-      status.textContent='✅ Import terminé : '+materialCatalog.length+' références enregistrées sur cet appareil. Connecte Cloudflare pour les synchroniser.';
+      showStatus('✅ Import terminé : '+materialCatalog.length+' références enregistrées sur cet appareil. Connecte Cloudflare pour les synchroniser.');
       alert('Catalogue fournisseurs importé localement : '+materialCatalog.length+' références. Connecte Cloudflare pour les synchroniser.');
     }
-  }catch(e){status.textContent='❌ Import impossible : '+(e.message||e);}
-  finally{btn.disabled=false;$('supplierCatalogJsonFile').value='';}
+  }catch(e){showStatus('❌ Import impossible : '+(e.message||e));}
+  finally{if(btn)btn.disabled=false;if(sideBtn)sideBtn.disabled=false;$('supplierCatalogJsonFile').value='';}
 }
 $('chooseSupplierCatalogJson').addEventListener('click',()=> $('supplierCatalogJsonFile').click());
 $('supplierCatalogJsonFile').addEventListener('change',e=>importSupplierCatalogJson(e.target.files&&e.target.files[0]));
