@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<!-- DECOSHIP V21.9 : choix du film unifié, recherche intelligente dans tout le catalogue pour chaque prestation. -->
+<!-- DECOSHIP V22.8 : correction modification fiche client — présentation projets alignée sur la maquette, aperçu PDF devis/facture importés, navigation retour. -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0C6B74">
-<title>DECOSHIP Contacts - Architecture trois pages</title>
+<title>DECOSHIP Clients V22.8 - Correction modification client</title>
 <style>
 :root{--d:#0C6B74;--b:#1C93A9;--o:#F08628;--y:#FCC019;--bg:#f3f7f7;--ink:#17343a;--muted:#6e858a}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;color:var(--ink)}
@@ -152,6 +152,41 @@ main{max-width:none;width:100%;padding:14px 18px}
  #detail .detailReturn{grid-column:auto}
 }
 
+
+
+/* V22.2 — présentation des projets calquée sur la maquette fournie */
+#detail .detailProjectsArea{max-width:1500px;margin:24px auto 0}
+#detail .detailProjectsArea>.detailRow{border:0;padding:0 0 14px;margin-bottom:18px}
+#detail .detailProjectsArea>.detailRow>.detailLabel{font-size:12px;letter-spacing:1px;color:#71858a;font-weight:900}
+#detail .detailProjectsArea>.detailRow .projectActions button{background:#3d7077;border-radius:14px;padding:11px 18px;min-height:42px}
+#detail .projectCard{background:#fff;border:0;border-radius:0;padding:22px 24px 28px;margin:0 0 24px;box-shadow:0 1px 0 #e8eeee;}
+#detail .projectHead{display:grid;grid-template-columns:minmax(260px,360px) minmax(150px,1fr);gap:16px;align-items:center;margin:0 0 18px}
+#detail .projectHead>div:first-child{background:#a6532b;border-radius:22px;padding:13px 24px;color:#fff;min-height:48px;display:flex;flex-direction:column;justify-content:center}
+#detail .projectHead>div:first-child>b{font-size:16px;letter-spacing:.3px;color:#fff}
+#detail .projectHead>div:first-child .muted{color:#f7e8df;font-size:11px;margin-top:3px}
+#detail .projectHead .projectStatus{justify-self:end;background:#fff4ed;color:#a6532b;border:1px solid #e9c8b5;padding:9px 14px}
+#detail .projectCard>.financeSummary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 18px;background:#f7f9f9;border:0;border-radius:12px;padding:12px 16px;margin:0 0 20px;font-size:13px}
+#detail .projectCard>.financeSummary>div:first-child{grid-column:1/-1;color:#58747a;font-size:12px;font-weight:900}
+#detail .projectWorkspace{display:grid;grid-template-columns:minmax(420px,1fr) minmax(420px,.95fr);gap:clamp(22px,4vw,58px);align-items:stretch;margin:12px 0 20px;padding:0 10px}
+#detail .projectModules{display:grid;grid-template-columns:repeat(2,minmax(180px,216px));grid-auto-rows:204px;justify-content:space-evenly;align-content:start;gap:28px 26px;padding:0 4px}
+#detail .projectModuleBtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:100%;height:204px;min-height:204px;padding:15px 12px;border:2px solid #292929;border-radius:22px;background:#fffaf6;color:#a6532b;box-shadow:none;transition:transform .15s,box-shadow .15s}
+#detail .projectModuleBtn:hover{transform:translateY(-2px);box-shadow:0 7px 18px #57331b18}
+#detail .projectModuleBtn .moduleIcon{display:flex;align-items:center;justify-content:center;font-size:76px;line-height:1.05;height:112px}
+#detail .projectModuleBtn .moduleName{font-size:16px;line-height:1.25;font-weight:850;text-align:center;color:#a6532b}
+#detail .projectPdfPanel{min-height:565px;border:2px solid #292929;border-radius:22px;background:#fff;padding:18px 18px 16px;display:flex;flex-direction:column;align-items:stretch;overflow:hidden}
+#detail .projectPdfPanel h3{margin:2px 0 16px;text-align:center;color:#a6532b;font-size:17px;letter-spacing:.3px}
+#detail .projectPdfTabs{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin:0 0 12px}
+#detail .projectPdfTabs button{min-height:38px;padding:8px 12px;border-radius:10px;font-size:12px;background:#edf4f4;color:#3d7077;border:1px solid #b9ccce}
+#detail .projectPdfFrame{display:block;width:100%;height:440px;min-height:440px;border:1px solid #d8e1e2;border-radius:8px;background:#f6f8f8}
+#detail .projectPdfEmpty{flex:1;min-height:440px;display:flex;align-items:center;justify-content:center;text-align:center;padding:30px;color:#87999d;background:#fafbfb;border:1px dashed #cbd7d9;border-radius:10px;font-size:14px}
+#detail .projectPdfPanel>.muted{text-align:center;font-size:11px}
+#detail .projectPdfPanel .pdfToggleBtn{align-self:center;min-height:36px;padding:7px 14px;border-radius:10px;font-size:12px}
+#detail .projectCard>.materialSummary{margin-top:14px}
+#detail .projectCard>.projectActions{justify-content:flex-end;border-top:1px solid #edf1f1;padding-top:14px;margin-top:18px}
+#detail .projectCard>.projectActions button{border-radius:11px}
+@media(max-width:1050px){#detail .projectWorkspace{grid-template-columns:1fr 1fr;gap:20px}#detail .projectModules{grid-template-columns:repeat(2,minmax(145px,1fr));grid-auto-rows:180px}#detail .projectModuleBtn{height:180px;min-height:180px}#detail .projectPdfPanel{min-height:520px}#detail .projectPdfFrame,#detail .projectPdfEmpty{height:390px;min-height:390px}}
+@media(max-width:700px){#detail .projectCard{padding:14px 10px 20px}#detail .projectHead{grid-template-columns:1fr;gap:9px}#detail .projectHead .projectStatus{justify-self:start}#detail .projectWorkspace{grid-template-columns:1fr;padding:0;gap:18px}#detail .projectModules{grid-template-columns:repeat(2,minmax(130px,1fr));grid-auto-rows:160px;gap:12px}#detail .projectModuleBtn{height:160px;min-height:160px;border-radius:16px}#detail .projectModuleBtn .moduleIcon{font-size:54px;height:82px}#detail .projectModuleBtn .moduleName{font-size:13px}#detail .projectPdfPanel{min-height:460px}#detail .projectPdfFrame,#detail .projectPdfEmpty{height:330px;min-height:330px}#detail .projectCard>.financeSummary{grid-template-columns:1fr 1fr}}
+
 </style>
 
 <style>
@@ -248,8 +283,8 @@ main{max-width:none;width:100%;padding:14px 18px}
 <div><label>Nom du bateau</label><input id="boat" placeholder="Nom du bateau"></div>
 <div id="clientStatusField"><label>Statut du client</label><select id="clientStatusSelect" aria-label="Statut du client"><option>Demande</option><option>RDV</option><option>Devis à réaliser</option><option>Devis envoyé</option><option>À produire</option><option>Produit</option><option>À poser</option><option>Posé</option><option>Terminé</option></select></div>
 <div class="row"><div><label>Téléphone</label><input id="phone" type="tel" placeholder="06 00 00 00 00"></div><div><label>E-mail</label><input id="email" type="email" placeholder="contact@entreprise.fr"></div></div>
-<label>Bateau / Projet</label><input id="project" placeholder="Catamaran, covering, décoration…">
-<div class="row"><div><label>Statut du projet</label><select id="status" aria-label="Statut du projet">
+<div id="projectNameField"><label>Intitulé du projet</label><input id="project" placeholder="Ex. : Covering coque, intérieur cabine…"></div>
+<div class="row" id="projectMetaFields"><div><label>Statut du projet</label><select id="status" aria-label="Statut du projet">
 <option>Demande</option><option>RDV</option><option>Devis à réaliser</option><option>Devis envoyé</option><option>À produire</option><option>Produit</option><option>À poser</option><option>Posé</option><option>Terminé</option>
 </select></div><div><label>Rappel</label><input id="follow" type="date"></div></div>
 <div class="financeBox">
@@ -266,7 +301,7 @@ main{max-width:none;width:100%;padding:14px 18px}
 <div class="row"><div><label>Total facture (€)</label><input id="invoiceAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0,00"></div></div>
 </div>
 
-<div class="coverBox">
+<div class="coverBox" id="coverModulePanel">
 <h3>📐 Métrage des panneaux / portes</h3>
 <div class="muted">Relevé des éléments à recouvrir. Les mesures et le calcul du rouleau sont enregistrés dans ce projet et synchronisés avec Cloudflare.</div>
 <div class="coverSettings">
@@ -287,7 +322,7 @@ main{max-width:none;width:100%;padding:14px 18px}
 <button type="button" class="alt" id="addMaterial"  style="margin-top:10px;width:100%">＋ Ajouter une matière</button>
 <div id="materialHelp" class="muted" style="margin-top:8px"></div>
 </div>
-<div class="card" id="quoteBuilder">
+<div class="card" id="quoteBuilder" data-project-module="quote">
 <h2>💶 Devis multi-prestations</h2>
 <div class="muted">Ajoute plusieurs prestations dans un même devis. Chaque ligne possède son propre calcul de matière et de main-d’œuvre.</div>
 <div id="quoteLines"></div>
@@ -312,7 +347,7 @@ main{max-width:none;width:100%;padding:14px 18px}
 </div>
 </div>
 </div>
-<div class="card"><h2>📸 Photos du projet</h2><div class="muted" style="margin-bottom:10px">Ajoute une photo en la prenant avec l’appareil photo ou choisis-la dans ta photothèque.</div><input id="photoCamera" type="file" accept="image/*" capture="environment" style="display:none"><input id="photoLibrary" type="file" accept="image/*" multiple style="display:none"><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" onclick="$('photoCamera').click()">📷 Prendre une photo</button><button type="button" class="secondary" onclick="$('photoLibrary').click()">🖼️ Photothèque</button></div><div id="photos" class="photos" style="margin-top:10px"></div><div id="photoHelp" class="muted" style="margin-top:8px"></div></div>
+<div class="card" id="photoModulePanel" data-project-module="photos"><h2>📸 Photos du projet</h2><div class="muted" style="margin-bottom:10px">Ajoute une photo en la prenant avec l’appareil photo ou choisis-la dans ta photothèque.</div><input id="photoCamera" type="file" accept="image/*" capture="environment" style="display:none"><input id="photoLibrary" type="file" accept="image/*" multiple style="display:none"><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" onclick="$('photoCamera').click()">📷 Prendre une photo</button><button type="button" class="secondary" onclick="$('photoLibrary').click()">🖼️ Photothèque</button></div><div id="photos" class="photos" style="margin-top:10px"></div><div id="photoHelp" class="muted" style="margin-top:8px"></div></div>
 <button class="orange" style="width:100%;margin-bottom:30px" id="save">💾 Enregistrer le contact</button>
 </section>
 
@@ -1015,6 +1050,7 @@ function esc(s){
 
 let editingId=null,editingProjectId=null,editingProjectIndex=null,editingPhotos=[],editingMaterials=[],editingQuoteLines=[];
 let editingCoverItems=[]; let coverSeq=0;
+let editingModuleMode=null, editingProjectOriginal=null, returnContactId=null;
 
 function clearCanvas(){
   ctx.clearRect(0,0,pad.width/scale,pad.height/scale);
@@ -1162,22 +1198,153 @@ function reset(){
 function newContact(){
   reset();
   renderPhotoList();
+  // Création d'une fiche client uniquement : aucun projet ni module à cette étape.
+  const hideIds=['projectNameField','projectMetaFields','coverModulePanel','quoteBuilder','photoModulePanel'];
+  hideIds.forEach(id=>{const el=$(id);if(el)el.style.display='none';});
+  const finance=document.querySelector('#form .financeBox');if(finance)finance.style.display='none';
+  const material=document.querySelector('#form .materialBox');if(material)material.style.display='none';
+  const noteCard=$('note')?.closest('.card');if(noteCard)noteCard.style.display='none';
+  $('formTitle').textContent='Nouveau client';
+  $('save').textContent='💾 Enregistrer le client';
   view('form');
 }
 
-async function editContact(id,projectId=null,projectIndex=null){
+function setProjectModuleForm(mode){
+  const form=$('form'); if(!form)return;
+  const children=[...form.children];
+  children.forEach(el=>{el.dataset.moduleHidden='1';el.style.display='none';});
+  const top=form.querySelector('.top');
+  if(top){top.style.display='flex';top.classList.add('moduleFormReturn');}
+  const save=$('save');
+  if(save){save.style.display='block';save.style.marginTop='16px';save.textContent=mode==='newProject'?'＋ Créer le projet':'💾 Enregistrer le projet';}
+  const back=$('back1');
+  if(back){back.textContent='◀ Retour au client';back.onclick=()=>showContact(returnContactId);}
+
+  if(mode==='newProject'){
+    // Le champ intitulé est dans la première carte du formulaire :
+    // afficher aussi cette carte, sinon le champ reste invisible malgré display:block.
+    const field=$('projectNameField');
+    const card=field?.closest('#form > .card');
+    if(card){
+      card.style.display='block';
+      card.dataset.moduleHidden='0';
+      [...card.children].forEach(el=>{
+        if(el!==field){el.style.display='none';el.dataset.moduleInnerHidden='1';}
+      });
+    }
+    if(field){field.style.display='block';field.dataset.moduleHidden='0';}
+    return;
+  }
+  if(mode==='editProject'){
+    // Écran complet du projet, sans aucune coordonnée de la fiche client.
+    children.forEach(el=>{el.style.display='block';el.dataset.moduleHidden='0';});
+    if(top)top.style.display='flex';
+    const contactFields=['name','company','boat','phone','email','clientStatusSelect'];
+    contactFields.forEach(id=>{const el=$(id);if(el){const wrap=el.closest('.row')||el.parentElement;if(wrap)wrap.style.display='none';}});
+    const clientStatus=$('clientStatusField');if(clientStatus)clientStatus.style.display='none';
+    const projectField=$('projectNameField');if(projectField)projectField.style.display='block';
+    const meta=$('projectMetaFields');if(meta)meta.style.display='grid';
+    return;
+  }
+  const target=mode==='measure' ? $('coverModulePanel') : mode==='quote' ? $('quoteBuilder') : mode==='photos' ? $('photoModulePanel') : null;
+  if(target){
+    if(target.id==='photoModulePanel'){target.style.display='block';target.dataset.moduleHidden='0';}
+    else{
+      const parentCard=target.closest('#form > .card');
+      if(parentCard){parentCard.style.display='block';parentCard.dataset.moduleHidden='0';
+        [...parentCard.children].forEach(el=>{el.dataset.moduleInnerHidden='1';el.style.display='none';});}
+      target.style.display='block';target.dataset.moduleInnerHidden='0';
+    }
+  }
+}
+
+function restoreProjectForm(){
+  const form=$('form');if(!form)return;
+  [...form.querySelectorAll('[data-module-inner-hidden="1"]')].forEach(el=>{el.style.display='';delete el.dataset.moduleInnerHidden;});
+  [...form.children].forEach(el=>{if(el.dataset.moduleHidden==='1'){el.style.display='';delete el.dataset.moduleHidden;}});
+  // Le mode « Modifier le projet » masque les coordonnées en masquant leurs conteneurs.
+  // Les rétablir explicitement avant d'ouvrir une fiche client.
+  ['name','company','boat','phone','email'].forEach(id=>{
+    const field=$(id);if(!field)return;
+    const wrapper=field.closest('.row')||field.parentElement;
+    if(wrapper)wrapper.style.display='';
+  });
+  if($('clientStatusField'))$('clientStatusField').style.display='';
+  const back=$('back1');if(back){back.textContent='← Retour';back.onclick=()=>view('list');}
+}
+function projectPdfMarkup(p,index){
+  const hasQuote=!!p.quotePdf,hasInvoice=!!p.invoicePdf;
+  const active=p.invoicePdf?'invoice':'quote';
+  const src=active==='invoice'?p.invoicePdf:p.quotePdf;
+  return '<div class="projectWorkspace">'+
+    '<div class="projectModules">'+
+      '<button type="button" class="projectModuleBtn" onclick="editContact('+currentDetailContactId+',\''+p.id+'\','+index+',\'quote\')"><span class="moduleIcon">💰</span><span class="moduleName">Calcul de devis<br>Multi-prestations</span></button>'+
+      '<button type="button" class="projectModuleBtn" onclick="editContact('+currentDetailContactId+',\''+p.id+'\','+index+',\'measure\')"><span class="moduleIcon">📐</span><span class="moduleName">Métrage<br>panneaux / portes</span></button>'+
+      '<button type="button" class="projectModuleBtn" onclick="editContact('+currentDetailContactId+',\''+p.id+'\','+index+',\'photos\')"><span class="moduleIcon">🖼️</span><span class="moduleName">Photos du projet</span></button>'+
+    '</div>'+
+    '<div class="projectPdfPanel"><h3>DEVIS / FACTURE</h3>'+
+      '<div class="projectPdfTabs"><button type="button" class="alt" onclick="document.getElementById(\'pdfQuote_'+index+'\').click()">Importer PDF devis</button><button type="button" class="alt" onclick="document.getElementById(\'pdfInvoice_'+index+'\').click()">Importer PDF facture</button></div>'+
+      '<input type="file" id="pdfQuote_'+index+'" accept="application/pdf,.pdf" style="display:none" onchange="importProjectPdf('+currentDetailContactId+','+index+',\'quotePdf\',this)">'+
+      '<input type="file" id="pdfInvoice_'+index+'" accept="application/pdf,.pdf" style="display:none" onchange="importProjectPdf('+currentDetailContactId+','+index+',\'invoicePdf\',this)">'+
+      (src?'<iframe class="projectPdfFrame" title="Aperçu PDF" src="'+src+'"></iframe>':'<div class="projectPdfEmpty">Importe le PDF du devis ou de la facture pour l’afficher ici.</div>')+
+      '<div class="muted" style="margin-top:7px">Devis : '+(hasQuote?'PDF importé':'non importé')+' · Facture : '+(hasInvoice?'PDF importée':'non importée')+'</div>'+
+      (src?'<button type="button" class="alt pdfToggleBtn" style="margin-top:7px" onclick="toggleProjectPdf('+index+',\''+(active==='quote'?'invoice':'quote')+'\')">Afficher '+(active==='quote'?'la facture':'le devis')+'</button>':'')+
+    '</div></div>';
+}
+let currentDetailContactId=null;
+async function importProjectPdf(contactId,projectIndex,field,input){
+  const file=input.files&&input.files[0];if(!file)return;
+  if(file.type!=='application/pdf'&&!file.name.toLowerCase().endsWith('.pdf')){alert('Sélectionne un fichier PDF.');input.value='';return;}
+  if(file.size>5*1024*1024){alert('Le PDF dépasse 5 Mo. Réduis sa taille avant de l’importer pour faciliter la synchronisation.');input.value='';return;}
+  try{
+    const data=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result));reader.onerror=()=>reject(reader.error);reader.readAsDataURL(file);});
+    const contact=await getContact(contactId);if(!contact||!contact.projects||!contact.projects[projectIndex])throw new Error('Projet introuvable.');
+    contact.projects[projectIndex][field]=data;
+    contact.projects[projectIndex][field+'Name']=file.name;
+    await dbPut(contact);
+    await showContact(contactId);
+  }catch(e){console.error(e);alert('Le PDF n’a pas pu être enregistré : '+e.message);}
+  input.value='';
+}
+function toggleProjectPdf(index,which){
+  const card=$('detailBox')?.querySelectorAll('.projectCard')[index];if(!card)return;
+  const p=window.__detailProjects?.[index];if(!p)return;
+  const frame=card.querySelector('.projectPdfFrame');
+  const src=which==='invoice'?p.invoicePdf:p.quotePdf;
+  if(frame&&src)frame.src=src;
+  const btn=card.querySelector('.pdfToggleBtn');
+  if(btn){const next=which==='invoice'?'quote':'invoice';btn.textContent='Afficher '+(next==='invoice'?'la facture':'le devis');btn.setAttribute('onclick','toggleProjectPdf('+index+',\''+next+'\')');}
+}
+async function editContact(id,projectId=null,projectIndex=null,moduleMode=null){
   let x=await getContact(id);
   if(!x)return;
 
   editingId=id;
   editingProjectId=projectId;
+  editingModuleMode=moduleMode;
+  returnContactId=id;
+  restoreProjectForm();
   const editingClientOnly = projectId===null && projectIndex===null;
-  if($('clientStatusField'))$('clientStatusField').style.display=editingClientOnly?'block':'none';
+  if(editingClientOnly){
+    // Écran client : afficher systématiquement les coordonnées, même après un passage
+    // par l'écran d'édition d'un projet qui les avait masquées.
+    ['name','company','boat','phone','email'].forEach(fid=>{
+      const field=$(fid);if(!field)return;
+      const wrapper=field.closest('.row')||field.parentElement;
+      if(wrapper)wrapper.style.display='';
+    });
+    if($('clientStatusField'))$('clientStatusField').style.display='block';
+    ['projectNameField','projectMetaFields','coverModulePanel','quoteBuilder','photoModulePanel'].forEach(fid=>{const el=$(fid);if(el)el.style.display='none';});
+    const finance=document.querySelector('#form .financeBox');if(finance)finance.style.display='none';
+    const material=document.querySelector('#form .materialBox');if(material)material.style.display='none';
+    const noteCard=$('note')?.closest('.card');if(noteCard)noteCard.style.display='none';
+  }else if($('clientStatusField'))$('clientStatusField').style.display='none';
   if($('clientStatusSelect'))$('clientStatusSelect').value=getContactClientStatus(x);
   editingProjectIndex=(Number.isInteger(projectIndex) ? projectIndex : null);
   const isNewProject = projectId === '__new__';
   const projects=Array.isArray(x.projects)?x.projects:[];
   const p = isNewProject ? null : (editingProjectIndex!==null ? projects[editingProjectIndex] : (projectId ? projects.find(v=>String(v.id)===String(projectId)) : projects[0]));
+  editingProjectOriginal=p?JSON.parse(JSON.stringify(p)):null;
   if(!p && projectId!==null && !isNewProject)return;
   editingPhotos=p ? (Array.isArray(p.photos)?p.photos.slice():[]) : [];
   editingCoverItems=p && Array.isArray(p.coverItems)?JSON.parse(JSON.stringify(p.coverItems)):[];
@@ -1192,7 +1359,7 @@ async function editContact(id,projectId=null,projectIndex=null){
   renderMaterials();
 
   $('formTitle').textContent=projectId===null ? 'Modifier le contact' : (isNewProject ? 'Nouveau projet' : 'Modifier le projet');
-  $('save').textContent=projectId===null?'💾 Enregistrer les modifications':'💾 Enregistrer le projet';
+  $('save').textContent=projectId===null?'💾 Enregistrer les modifications':(isNewProject?'＋ Créer le projet':'💾 Enregistrer le projet');
   $('name').value=x.name||'';
   $('company').value=x.company||'';
   $('boat').value=x.boat||'';
@@ -1226,9 +1393,11 @@ async function editContact(id,projectId=null,projectIndex=null){
     im.src=p.drawing;
   }
   view('form');
+  if(moduleMode){setProjectModuleForm(moduleMode);if(moduleMode==='newProject')setTimeout(()=>$('project')?.focus(),0);}
 }
 $('save').onclick=async()=>{
   const project={
+    ...(editingProjectOriginal||{}),
     id:(editingProjectIndex!==null && editingProjectIndex>=0 && editingProjectId!=='__new__') ? (editingProjectId || ('p-'+Date.now())) : ('p-'+Date.now()),
     name:$('project').value.trim() || 'Projet sans nom',
     status:$('status').value,
@@ -1289,9 +1458,9 @@ $('save').onclick=async()=>{
       const obj={
         id:Date.now(),
         name:$('name').value, company:$('company').value, boat:$('boat').value, phone:$('phone').value, email:$('email').value,
-        projects:[project], clientStatus:normalizeClientStatus($('clientStatusSelect')?.value||'Demande'),
-        // Legacy fields kept for compatibility with older versions.
-        project:project.name,status:project.status,follow:project.follow,quoteAmount:project.quoteAmount,depositAmount:project.depositAmount,depositStatus:project.depositStatus,balanceStatus:project.balanceStatus,invoiceAmount:project.invoiceAmount,note:project.note,drawing:project.drawing,noteType:project.noteType,photos:project.photos,materials:project.materials||[]
+        projects:[], clientStatus:normalizeClientStatus($('clientStatusSelect')?.value||'Demande'),
+        // La fiche client est créée séparément ; le premier projet sera ajouté ensuite.
+        project:'',status:'Demande',follow:'',quoteAmount:'',depositAmount:'',depositStatus:'pending',balanceStatus:'pending',invoiceAmount:'',note:'',drawing:'',noteType:'keyboard',photos:[],materials:[]
       };
       await dbPut(obj);
       alert('Contact enregistré');
@@ -1302,9 +1471,14 @@ $('save').onclick=async()=>{
     return;
   }
 
+  const savedModuleMode=editingModuleMode;
+  const savedContactId=editingId;
   reset();
+  editingModuleMode=null;editingProjectOriginal=null;
   if(window.refreshPlanning) await window.refreshPlanning();
-  view('list');
+  if(savedModuleMode && savedContactId!==null){await showContact(savedContactId);}
+  else if(savedContactId!==null && !savedModuleMode){await showContact(savedContactId);}
+  else{view('list');}
 };
 
 
@@ -1423,6 +1597,7 @@ initCoverUI();
 async function showContact(id){
   let x=await getContact(id);
   if(!x)return;
+  currentDetailContactId=id;window.__detailProjects=x.projects||[];
 
   $('detailTitle').textContent=x.name||'Contact';
   let h='';
@@ -1439,13 +1614,13 @@ async function showContact(id){
     h+='<div class="projectCard">'+
       '<div class="projectHead"><div><b>⛵ '+esc(p.name||'Projet sans nom')+'</b><div class="muted">'+esc(normalizeStatus(p.status))+(p.follow?' · Rappel : '+esc(p.follow):'')+'</div></div><span class="projectStatus '+statusClass(normalizeStatus(p.status))+'">'+esc(normalizeStatus(p.status))+'</span></div>'+
       '<div class="amounts financeSummary"><div><strong>💶 Suivi financier</strong></div><div>Devis : '+(p.quoteAmount!==''&&p.quoteAmount!=null?esc(money(p.quoteAmount)):'—')+'</div><div>Acompte : '+(p.depositAmount!==''&&p.depositAmount!=null?esc(money(p.depositAmount)):'—')+' &nbsp; '+(p.depositStatus==='paid'?'☑ Réglé':'☐ En attente')+'</div>'+(p.depositStatus==='paid'?'<div>Solde : '+esc(money(Math.max(0,Number(p.quoteAmount||0)-Number(p.depositAmount||0))))+' &nbsp; '+(p.balanceStatus==='paid'?'☑ Réglé':'☐ En attente')+'</div>':'')+'<div>Total facture : '+(p.invoiceAmount!==''&&p.invoiceAmount!=null?esc(money(p.invoiceAmount)):'—')+'</div></div>'+
+      projectPdfMarkup(p,projectIndex)+
 
       (Array.isArray(p.coverItems)&&p.coverItems.length?'<div class="materialSummary"><div class="materialSummaryTitle">📐 Métrage des panneaux / portes</div><div class="materialSummaryRow">Rouleau : '+esc(p.coverRoll||1200)+' mm · Éléments : '+p.coverItems.length+'</div>'+p.coverItems.map((m,i)=>'<div class="materialSummaryRow"><strong>'+esc((i+1)+'. '+(m.name||'Élément'))+'</strong><br>Façade : '+esc(m.w)+' × '+esc(m.h)+' mm · Chant : '+esc(m.t)+' mm · Veinage : '+esc(m.grain==='vertical'?'Vertical':m.grain==='horizontal'?'Horizontal':'Indifférent')+'<br>Chants : '+esc((m.edges||[]).map((v,j)=>v?['Haut','Bas','Gauche','Droite'][j]:null).filter(Boolean).join(', ')||'Aucun')+'</div>').join('')+'<div class="materialSummaryRow"><strong>Métrage estimé : '+(function(){const saved=editingCoverItems;editingCoverItems=p.coverItems.map((v,i)=>({...v,id:i+1}));const z=coverPack(Number(p.coverRoll)||1200).total/1000;editingCoverItems=saved;return z.toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' m';})()+'</strong></div></div>':'')+
       (p.note?'<div class="detailValue" style="margin-top:9px">'+esc(p.note)+'</div>':'')+
       '<div class="materialSummary"><div class="materialSummaryTitle">🧴 Matières / adhésifs utilisés</div>'+(Array.isArray(p.materials)&&p.materials.length?p.materials.map((m,i)=>'<div class="materialSummaryRow"><strong>'+esc((i+1)+'. '+(m.name||'Matière sans nom'))+'</strong><br>Marque : '+esc(m.brand||'—')+' · Référence : '+esc(m.reference||'—')+' · Couleur : '+esc(m.color||'—')+'<br>Longueur : '+esc(m.length||'—')+' m · Prix TTC : '+esc(m.priceTtc?money(m.priceTtc):'—')+'</div>').join(''):'<div class="muted">Aucune matière renseignée pour ce projet.</div>')+'</div>'+
-      (p.photos&&p.photos.length?'<div class="detailPhotos">'+p.photos.map(src=>'<img src="'+src+'">').join('')+'</div>':'')+
       (p.drawing?'<img class="drawing" src="'+p.drawing+'">':'')+
-      '<div class="projectActions"><button class="orange" onclick="editContact('+x.id+',\''+p.id+'\','+projectIndex+')">✏️ Modifier</button><button class="danger" onclick="deleteProject('+x.id+','+projectIndex+')">🗑️ Supprimer</button></div>'+
+      '<div class="projectActions"><button class="orange" onclick="editContact('+x.id+',\''+p.id+'\','+projectIndex+',\'editProject\')">✏️ Modifier</button><button class="danger" onclick="deleteProject('+x.id+','+projectIndex+')">🗑️ Supprimer</button></div>'+
       '</div>';
   });
 
@@ -1502,7 +1677,7 @@ function initPhotoViewer(){
 initPhotoViewer();
 
 function newProject(id){
-  editContact(id,'__new__');
+  editContact(id,'__new__',null,'newProject');
 }
 
 async function deleteContact(contactId){
